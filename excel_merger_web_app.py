@@ -29,7 +29,7 @@ if file_one and file_two:
 
     # If there are common columns, merge on those columns
     if common_columns:
-        merged_df = pd.merge(df1, df2, on=common_columns)
+        merged_df = pd.merge(df1, df2, on=common_columns, how='inner')
     else:
         # If there are no common columns, display all the columns and ask the user on which column to perform the merge
         all_columns = list(set(df1.columns) | set(df2.columns))
