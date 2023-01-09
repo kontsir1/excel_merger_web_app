@@ -52,7 +52,7 @@ file1 = st.sidebar.file_uploader("Upload first file")
 file2 = st.sidebar.file_uploader("Upload second file")
 
 if st.sidebar.button("Merge files"):
-    merged = merge_files(file1, file2, column)
+    merged = merge_files(file1, file2)
     st.dataframe(merged)
 
 if st.sidebar.button("Download merged file"):
