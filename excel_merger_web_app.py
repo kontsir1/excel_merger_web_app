@@ -1,98 +1,65 @@
-import streamlit as st
+# pip install openpyxl
 import pandas as pd
+import streamlit as st
+import zipfile
+import base64
+import os
 
-def merge_excel_files(excel_files, merge_column):
-    # create an empty dataframe to store the final merged file
-    merged_df = pd.DataFrame()
+# Web App Title
+st.markdown('''
+# **Excel File Merger**
 
-    # loop through each excel file and add it to the merged dataframe
-    for file in excel_files:
-        try:
-            df = pd.read_excel(file)
-            merged_df = pd.merge(merged_df, df, on=merge_column, how="outer")
-        except Exception as e:
-            st.write("Error: Invalid file selected")
-            st.write(e)
+This is the **Excel File Merger App** created in Python using the Streamlit library.
 
-    return merged_df
+**Credit:** App built in `Python` + `Streamlit` by [Chanin Nantasenamat](https://medium.com/@chanin.nantasenamat) (aka [Data Professor](http://youtube.com/dataprofessor))
 
-# add a file uploader for the user to select the excel files they want to merge
-excel_files = st.file_uploader("Select excel files to merge", type=["xlsx", "csv"])
+---
+''')
 
-# display the header of each imported file
-if excel_files:
-    for file in excel_files:
-        try:
-            df = pd.read_excel(file)
-            st.write(df.head())
-        except Exception as e:
-            st.write("Error: Invalid file selected")
-            st.write(e)
+# Excel file merge function
+def excel_file_merge(zip_file_name):
+    df = pd.DataFrame()
+    archive = zipfile.ZipFile(zip_file_name, 'r')
+    with zipfile.ZipFile(zip_file_name, "r") as f:
+        for file in f.namelist():
+          xlfile = archive.open(file)
+          if file.endswith('.xlsx'):
+            # Add a note indicating the file name that this dataframe originates from
+            df_xl = pd.read_excel(xlfile, engine='openpyxl')
+            df_xl['Note'] = file
+            # Appends content of each Excel file iteratively
+            df = df.append(df_xl, ignore_index=True)
+    return df
 
-# add a dropdown menu for the user to select the column on which to merge the excel files
-if excel_files:
-    merge_column = st.selectbox("Select column to merge on", df.columns)
+# Upload CSV data
+with st.sidebar.header('1. Upload your ZIP file'):
+    uploaded_file = st.sidebar.file_uploader("Excel-containing ZIP file", type=["zip"])
+    st.sidebar.markdown("""
+[Example ZIP input file](https://github.com/dataprofessor/excel-file-merge-app/raw/main/nba_data.zip)
+""")
+
+# File download
+def filedownload(df):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+    href = f'<a href="data:file/csv;base64,{b64}" download="merged_file.csv">Download Merged File as CSV</a>'
+    return href
+
+def xldownload(df):
+    df.to_excel('data.xlsx', index=False)
+    data = open('data.xlsx', 'rb').read()
+    b64 = base64.b64encode(data).decode('UTF-8')
+    #b64 = base64.b64encode(xl.encode()).decode()  # strings <-> bytes conversions
+    href = f'<a href="data:file/xls;base64,{b64}" download="merged_file.xlsx">Download Merged File as XLSX</a>'
+    return href
+
+# Main panel
+if st.sidebar.button('Submit'):
+    #@st.cache
+    df = excel_file_merge(uploaded_file)
+    st.header('**Merged data**')
+    st.write(df)
+    st.markdown(filedownload(df), unsafe_allow_html=True)
+    st.markdown(xldownload(df), unsafe_allow_html=True)
 else:
-    st.write("Error: No files selected")
-
-# add a validation check to ensure that the user selects at least two excel files to merge
-if excel_files and len(excel_files) < 2:
-    st.write("Error: Please select at least two excel files to merge")
-else:
-    # add a validation check to ensure that the selected merge column is present in all of the excel files
-    valid_merge_column = True
-    for file in excel_files:
-        df = pd.read_excel(file)
-        if merge_column not in df.columns:
-            valid_merge_column = False
-            st.write("Error: Selected merge column is not present in all of the excel files")
-
-        # add a check to ensure that the selected merge column has the same data type in all of the files
-        if df[merge_column].dtype != merged_df[merge_column].dtype:
-            valid_merge_column = False
-            st.write("Error: Selected merge column has different data types in the different files")
-
-    # call the merge_excel_files function and pass in the excel files and the selected merge column as arguments
-    if valid_merge_column:
-        # create a progress bar to show the progress of the file merge process
-        progress_bar = st.progress(0)
-        max_steps = len(excel_files)
-        step = 0
-
-        try:
-            merged_df = merge_excel_files(excel_files, merge_column)
-
-            # update the progress bar
-            step += 1
-            progress_bar.progress(step/max_steps)
-        except Exception as e:
-            st.write("Error: Invalid merge column selected")
-            st.write(e)
-
-        # display the finalised file
-        st.dataframe(merged_df)
-
-        # add a multi-select box for the user to select the columns they want to include in the merged file
-        selected_columns = st.multiselect("Select columns to include in merged file", merged_df.columns)
-
-        # create a new dataframe with only the selected columns
-        filtered_df = merged_df[selected_columns]
-
-# add a download button for the user to download the merged file in either xlsx or csv format
-if st.button("Download file"):
-    file_format = st.selectbox("Select file format", ["xlsx", "csv"])
-    if file_format == "xlsx":
-        # convert the dataframe to an excel file
-        merged_excel = pd.ExcelWriter("merged_file.xlsx", engine="xlsxwriter")
-        filtered_df.to_excel(merged_excel, index=False)
-        merged_excel.save()
-
-        # download the excel file
-        st.download("merged_file.xlsx")
-    elif file_format == "csv":
-        # convert the dataframe to a csv file
-        filtered_df.to_csv("merged_file.csv", index=False)
-
-        # download the csv file
-        st.download("merged_file.csv")
-
+    st.info('Awaiting for ZIP file to be uploaded.')
