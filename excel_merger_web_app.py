@@ -16,9 +16,10 @@ if file_one and file_two:
     df2 = pd.read_csv(file_two)
 
     # Display the two dataframes side by side
+    col1, col2 = str.columns(2)
     str.markdown("## First file")
-    with str.column("one-half"):
+    with col1:
         str.write(df1)
-    st.markdown("## Second file")
-    with str.column("one-half"):
+    str.markdown("## Second file")
+    with col2:
         str.write(df2)
