@@ -23,4 +23,20 @@ if file_one and file_two:
     with col2:
         st.markdown("## Second file")
         st.write(df2)
-############################################################ 
+    ###### ABOVE THIS DO NOT DELETE #######
+    # Find common columns between the two dataframes
+    common_columns = list(set(df1.columns) & set(df2.columns))
+
+    # If there are common columns, merge on those columns
+    if common_columns:
+        merged_df = pd.merge(df1, df2, on=common_columns)
+    else:
+        # If there are no common columns, display all the columns and ask the user on which column to perform the merge
+        all_columns = list(set(df1.columns) | set(df2.columns))
+        st.write("No common columns between the two dataframes.")
+        st.write("The available columns are:", all_columns)
+        merge_column = st.selectbox("Select the column on which to perform the merge:", all_columns)
+        merged_df = pd.merge(df1, df2, on=merge_column)
+
+    # Display the merged dataframe
+    st.write(merged_df)
