@@ -55,11 +55,11 @@ def download_file(data, file_format):
 
 st.title("File Merger")
 
-file1 = st.file_uploader("Upload first file")
-file2 = st.file_uploader("Upload second file")
-column = st.selectbox("Select column to merge on", [])
+file1 = st.sidebar.file_uploader("Upload first file")
+file2 = st.sidebar.file_uploader("Upload second file")
+column = st.sidebar.selectbox("Select column to merge on", [])
 
-select_columns = st.checkbox("Select specific columns to include in merged file")
+select_columns = st.sidebar.checkbox("Select specific columns to include in merged file")
 
 if select_columns:
     selected_columns = select_columns(merged)
@@ -71,5 +71,5 @@ if st.button("Merge files"):
     st.dataframe(merged)
 
 if st.button("Download merged file"):
-    format = st.radio("Select format", ["CSV", "XLSX"])
+    format = st.sidebar.radio("Select format", ["CSV", "XLSX"])
     download_file(merged, format)
