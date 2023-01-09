@@ -1,4 +1,4 @@
-import steamlit as st
+import streamlit as st
 import pandas as pd
 
 st.sidebar.markdown("# Select two files")
