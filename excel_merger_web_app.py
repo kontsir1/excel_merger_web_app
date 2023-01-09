@@ -46,7 +46,6 @@ if file_one and file_two:
     # Check if either common column is not present in both dataframes
     if common_column1 not in df1.columns or common_column2 not in df2.columns:
         st.error("Error: One or both of the selected common columns are not present in both dataframes.")
-        return
     
     # Merge the dataframes on the selected common columns
     df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
@@ -54,7 +53,6 @@ if file_one and file_two:
     # Check if the merged dataframe is empty
     if df_merged.empty:
         st.error("Error: No common rows found between the two dataframes.")
-        return
     
     # Display the merged dataframe
     st.markdown("## Merged dataframe")
