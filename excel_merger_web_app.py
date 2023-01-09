@@ -50,7 +50,6 @@ st.title("File Merger")
 
 file1 = st.sidebar.file_uploader("Upload first file")
 file2 = st.sidebar.file_uploader("Upload second file")
-column = st.sidebar.selectbox("Select column to merge on", [])
 
 if st.sidebar.button("Merge files"):
     merged = merge_files(file1, file2, column)
