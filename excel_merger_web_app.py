@@ -34,10 +34,10 @@ if file_one and file_two:
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("## First file")
-        st.write(df1)
+        st.write(df1.head(10))
     with col2:
         st.markdown("## Second file")
-        st.write(df2)
+        st.write(df2.head(10))
     
     # Get the common column names from the user
     common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
