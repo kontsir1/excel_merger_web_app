@@ -44,7 +44,6 @@ if file_one and file_two:
     st.write(df_merged)
     
     # Add a download button to the sidebar
-    st.sidebar.markdown("## Download merged dataframe")
     if st.sidebar:        
         # Add a download button to the sidebar
         st.sidebar.markdown("## Download merged dataframe")
