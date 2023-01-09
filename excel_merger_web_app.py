@@ -17,7 +17,7 @@ def merge_excel_files(excel_files, merge_column):
     return merged_df
 
 # add a file uploader for the user to select the excel files they want to merge
-excel_files = st.file_uploader("Select excel files to merge", type=["xlsx"])
+excel_files = st.file_uploader("Select excel files to merge", type=["xlsx", "csv"])
 
 # display the header of each imported file
 if excel_files:
