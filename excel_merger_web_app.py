@@ -75,8 +75,7 @@ column = st.sidebar.selectbox("Select column to merge on", column_options)
 
 select_columns = st.sidebar.checkbox("Select specific columns to include in merged file")
 
-if select_
-    merged = merge_files(files, column, selected_columns)
+if select_merged = merge_files(files, column, selected_columns)
     st.dataframe(merged)
 
 if st.sidebar.button("Download merged file"):
