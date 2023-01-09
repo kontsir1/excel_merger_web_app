@@ -5,31 +5,45 @@ import base64
 
 from openpyxl.utils.dataframe import dataframe_to_rows
 
+import io
+import base64
+
 def merge_files(file1, file2):
+    # Check if file1 or file2 is None
+    if file1 is None or file2 is None:
+        st.error("Please upload both files before merging.")
+        return
+
+    # Decode file1 and create a file-like object
+    file1_content = base64.b64decode(file1.get_encoded_string())
+    file1_like = io.BytesIO(file1_content)
+
     # Check if file1 is a CSV file
-    if file1.filename.endswith(".csv"):
-        df1 = pd.read_csv(file1)
+    if file1.name.endswith(".csv"):
+        df1 = pd.read_csv(file1_like)
     # Check if file1 is an Excel file
-    elif file1.filename.endswith(".xlsx"):
-        df1 = pd.read_excel(file1)
+    elif file1.name.endswith(".xlsx"):
+        df1 = pd.read_excel(file1_like)
     else:
         st.error("Unsupported file type for file1. Please upload a CSV or Excel file.")
         return
 
+    # Decode file2 and create a file-like object
+    file2_content = base64.b64decode(file2.get_encoded_string())
+    file2_like = io.BytesIO(file2_content)
+
     # Check if file2 is a CSV file
-    if file2.filename.endswith(".csv"):
-        df2 = pd.read_csv(file2)
+    if file2.name.endswith(".csv"):
+        df2 = pd.read_csv(file2_like)
     # Check if file2 is an Excel file
-    elif file2.filename.endswith(".xlsx"):
-        df2 = pd.read_excel(file2)
+    elif file2.name.endswith(".xlsx"):
+        df2 = pd.read_excel(file2_like)
     else:
         st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
         return
 
     merged = pd.merge(df1, df2, how='inner')
-    
     return merged
-
 
 def download_file(data, file_format):
     if file_format == "CSV":
