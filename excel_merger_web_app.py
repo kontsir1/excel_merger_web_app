@@ -5,28 +5,28 @@ import base64
 
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-def merge_files(file1, file2, column, selected_columns):
-    # Check if file1 is a CSV file
-    if file1.filename.endswith(".csv"):
-        df1 = pd.read_csv(file1)
-    # Check if file1 is an Excel file
-    elif file1.filename.endswith(".xlsx"):
-        df1 = pd.read_excel(file1)
-    else:
-        st.error("Unsupported file type for file1. Please upload a CSV or Excel file.")
-        return
-
-    # Check if file2 is a CSV file
-    if file2.filename.endswith(".csv"):
-        df2 = pd.read_csv(file2)
-    # Check if file2 is an Excel file
-    elif file2.filename.endswith(".xlsx"):
-        df2 = pd.read_excel(file2)
-    else:
-        st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
-        return
-
-    merged = pd.merge(df1, df2, on=column, how='inner')
+def merge_files(files, column, selected_columns):
+    # Initialize an empty list to store the dataframes
+    dataframes = []
+    
+    # Iterate through the list of files
+    for file in files:
+        # Check if file is a CSV file
+        if file.filename.endswith(".csv"):
+            df = pd.read_csv(file)
+        # Check if file is an Excel file
+        elif file.filename.endswith(".xlsx"):
+            df = pd.read_excel(file)
+        else:
+            st.error("Unsupported file type. Please upload a CSV or Excel file.")
+            return
+        
+        # Append the dataframe to the list
+        dataframes.append(df)
+    
+    # Merge the dataframes using pd.concat
+    merged = pd.concat(dataframes, axis=0, ignore_index=True)
+    
     if selected_columns:
         merged = merged[selected_columns]
     return merged
@@ -43,7 +43,7 @@ def download_file(data, file_format):
         href = f'<a href="data:file/csv;base64,{b64}" download="merged_file.csv">Download CSV File</a>'
         st.markdown(href, unsafe_allow_html=True)
     elif file_format == "XLSX":
-        xlsx = openpyxl.Workbook()
+        xlsx = openpyxl.Workbook()        
         sheet = xlsx.active
         for r in dataframe_to_rows(data, index=False, header=True):
             sheet.append(r)
@@ -55,11 +55,11 @@ def download_file(data, file_format):
 
 st.title("File Merger")
 
-file1 = st.sidebar.file_uploader("Upload first file")
-file2 = st.sidebar.file_uploader("Upload second file")
+# Allow the user to select multiple files
+files = st.sidebar.file_uploader("Upload files", multiple=True)
 
-# Get list of column names from file1 dataframe
-column_options = list(pd.read_csv(file1).columns)
+# Get list of column names from the first file
+column_options = list(pd.read_csv(files[0]).columns)
 
 # Allow user to select column
 column = st.sidebar.selectbox("Select column to merge on", column_options)
@@ -72,10 +72,11 @@ else:
     selected_columns = None
 
 if st.sidebar.button("Merge files"):
-    merged = merge_files(file1, file2, column, selected_columns)
+    merged = merge_files(files, column, selected_columns)
     st.dataframe(merged)
 
 if st.sidebar.button("Download merged file"):
     format = st.sidebar.radio("Select format", ["CSV", "XLSX"])
     download_file(merged, format)
+
 
