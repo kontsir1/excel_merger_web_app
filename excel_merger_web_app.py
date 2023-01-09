@@ -1,58 +1,57 @@
-# pip install openpyxl
-import pandas as pd
 import streamlit as st
-import zipfile
+import pandas as pd
+import openpyxl
 import base64
-import os
 
-# Web App Title
-st.markdown('''
-# **Excel File Merger**
+from openpyxl.utils.dataframe import dataframe_to_rows
 
-This is the **Excel File Merger App** created in Python using the Streamlit library.
+def merge_files(file1, file2, column, selected_columns):
+    df1 = pd.read_csv(file1)
+    df2 = pd.read_csv(file2)
+    merged = pd.merge(df1, df2, on=column)
+    if selected_columns:
+        merged = merged[selected_columns]
+    return merged
 
-**Credit:** App built in `Python` + `Streamlit` by [Chanin Nantasenamat](https://medium.com/@chanin.nantasenamat) (aka [Data Professor](http://youtube.com/dataprofessor))
+def select_columns(dataframe):
+    all_columns = list(dataframe.columns)
+    selected_columns = st.multiselect("Select columns to include in merged file", all_columns)
+    return selected_columns
 
----
-''')
+def download_file(data, file_format):
+    if file_format == "CSV":
+        csv = data.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+        href = f'<a href="data:file/csv;base64,{b64}" download="merged_file.csv">Download CSV File</a>'
+        st.markdown(href, unsafe_allow_html=True)
+    elif file_format == "XLSX":
+        xlsx = openpyxl.Workbook()
+        sheet = xlsx.active
+        for r in dataframe_to_rows(data, index=False, header=True):
+            sheet.append(r)
+        xlsx.save("merged_file.xlsx")
+        st.markdown(
+            f'<a href="/downloads/merged_file.xlsx" download>Download XLSX File</a>',
+            unsafe_allow_html=True,
+        )
 
-# Excel file merge function
-def excel_file_merge(zip_file_name, column):
-    df = pd.DataFrame()
-    archive = zipfile.ZipFile(zip_file_name, 'r')
-    with zipfile.ZipFile(zip_file_name, "r") as f:
-        for file in f.namelist():
-          xlfile = archive.open(file)
-          if file.endswith('.xlsx'):
-            # Add a note indicating the file name that this dataframe originates from
-            df_xl = pd.read_excel(xlfile, engine='openpyxl')
-            df_xl['Note'] = file
-            # Appends content of each Excel file iteratively
-            df = df.append(df_xl, ignore_index=True)
-    # Merge the data based on the specified column
-    merged_df = pd.merge(df, df_xl, on=column)
-    return merged_df
+st.title("File Merger")
 
-# Upload CSV data
-with st.sidebar.header('1. Upload your ZIP file'):
-    uploaded_file = st.sidebar.file_uploader("Excel-containing ZIP file", type=["zip"])
-    st.sidebar.markdown("""
-[Example ZIP input file](https://github.com/dataprofessor/excel-file-merge-app/raw/main/nba_data.zip)
-""")
+file1 = st.file_uploader("Upload first file")
+file2 = st.file_uploader("Upload second file")
+column = st.selectbox("Select column to merge on", merged.columns)
 
-# Main panel
-if st.sidebar.button('Submit'):
-    #@st.cache
-    df = excel_file_merge(uploaded_file)
-    
-    # Select column for merge
-    with st.sidebar.header('2. Select the column for merge'):
-        column = st.sidebar.selectbox("Column", df.columns)
-    
-    df = excel_file_merge(uploaded_file, column)
-    st.header('**Merged data**')
-    st.write(df)
-    st.markdown(filedownload(df), unsafe_allow_html=True)
-    st.markdown(xldownload(df), unsafe_allow_html=True)
+select_columns = st.checkbox("Select specific columns to include in merged file")
+
+if select_columns:
+    selected_columns = select_columns(merged)
 else:
-    st.info('Awaiting for ZIP file to be uploaded.')
+    selected_columns = None
+
+if st.button("Merge files"):
+    merged = merge_files(file1, file2, column, selected_columns)
+    st.dataframe(merged)
+
+if st.button("Download merged file"):
+    format = st.radio("Select format", ["CSV", "XLSX"])
+    download_file(merged, format)
