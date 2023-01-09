@@ -1,22 +1,19 @@
 import streamlit as st
 import pandas as pd
-import openpyxl
-import base64
 
-from openpyxl.utils.dataframe import dataframe_to_rows
+df = pd.read_csv("dir/file.csv")
+
+@st.experimental_memo
+def convert_df(df):
+   return df.to_csv(index=False).encode('utf-8')
 
 
-st.title("File Merger")
+csv = convert_df(df)
 
-
-#adding a file uploader to accept multiple CSV files
-
-uploaded_files = st.file_uploader("Please choose a CSV file", accept_multiple_files=True)
-
-for file in uploaded_files:
-
-    bytes_data = file.read()
-
-    st.write("File uploaded:", file.name)
-
-    st.write(bytes_data)
+st.download_button(
+   "Press to Download",
+   csv,
+   "file.csv",
+   "text/csv",
+   key='download-csv'
+)
