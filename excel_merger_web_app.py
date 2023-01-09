@@ -11,6 +11,7 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     
     return df_merged
 
+# Set page layout to wide
 st.set_page_config(layout="wide")
 
 # Use the file uploader to select the first file
