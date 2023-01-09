@@ -46,7 +46,3 @@ def main():
             st.write("Downloading csv file...")
             merged_df.to_csv("merged_file.csv")
             st.download("merged_file.csv")
-
-# Run main function
-if __name__ == '__main__':
-    main()
