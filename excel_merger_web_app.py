@@ -6,6 +6,9 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     # Merge the two dataframes on the specified common columns
     df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
     
+    # Drop one of the common columns
+    df_merged.drop(common_column1, axis=1, inplace=True)
+    
     return df_merged
 
 # Use the file uploader to select the first file
