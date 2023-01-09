@@ -1,21 +1,29 @@
-import pandas as pd
 import streamlit as st
+import pandas as pd
+import openpyxl
+import base64
 
-# Cache the dataframe so it's only loaded once
-@st.experimental_memo
-def load_data():
-    return pd.DataFrame(
-        {
-            "first column": [1, 2, 3, 4],
-            "second column": [10, 20, 30, 40],
-        }
-    )
+from openpyxl.utils.dataframe import dataframe_to_rows
 
-# Boolean to resize the dataframe, stored as a session state variable
-st.checkbox("Use container width", value=False, key="use_container_width")
 
-df = load_data()
+st.title("File Merger")
 
-# Display the dataframe and allow the user to stretch the dataframe
-# across the full width of the container, based on the checkbox value
-st.dataframe(df, use_container_width=st.session_state.use_container_width)
+if file is not None:
+
+    df= pd.read_csv(file)
+
+    st.write(df)
+
+
+
+#adding a file uploader to accept multiple CSV files
+
+uploaded_files = st.file_uploader("Please choose a CSV file", accept_multiple_files=True)
+
+for file in uploaded_files:
+
+    bytes_data = file.read()
+
+    st.write("File uploaded:", file.name)
+
+    st.write(bytes_data)
