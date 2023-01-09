@@ -11,6 +11,8 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     
     return df_merged
 
+st.set_page_config(layout="wide")
+
 # Use the file uploader to select the first file
 file_one = st.sidebar.file_uploader("Upload first file")
 
