@@ -49,7 +49,7 @@ else:
 
         # add a check to ensure that the selected merge column has the same data type in all of the files
         if df[merge_column].dtype != merged_df[merge_column].dtype:
-                        valid_merge_column = False
+            valid_merge_column = False
             st.write("Error: Selected merge column has different data types in the different files")
 
     # call the merge_excel_files function and pass in the excel files and the selected merge column as arguments
