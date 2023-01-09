@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import base64
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     # Merge the two dataframes on the specified common columns
@@ -38,3 +39,16 @@ if file_one and file_two:
     # Display the merged dataframe
     st.markdown("## Merged dataframe")
     st.write(df_merged)
+    
+    # Add a download button to the sidebar
+    st.sidebar.markdown("## Download merged dataframe")
+    if st.sidebar        
+        # Add a download button to the sidebar
+        st.sidebar.markdown("## Download merged dataframe")
+        if st.sidebar.button("Download CSV"):
+            st.markdown("Clicked download button")
+            csv = df_merged.to_csv(index=False)
+            b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+            href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV File</a>'
+            st.markdown(href, unsafe_allow_html=True)
+
