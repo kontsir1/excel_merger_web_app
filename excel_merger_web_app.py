@@ -1,12 +1,11 @@
 import streamlit as st
 import pandas as pd
 
-def merge_dataframes(df1, df2, common_column):
-    # Merge the two dataframes on the specified common column
-    df_merged = pd.merge(df1, df2, on=common_column, how='outer')
+def merge_dataframes(df1, df2, common_column1, common_column2):
+    # Merge the two dataframes on the specified common columns
+    df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='outer')
     
     return df_merged
-
 
 st.sidebar.markdown("# Select two files")
 
@@ -31,11 +30,12 @@ if file_one and file_two:
         st.markdown("## Second file")
         st.write(df2)
     ###### ABOVE THIS DO NOT DELETE #######
-     # Get the common column name from the user
-    common_column = st.sidebar.selectbox("Select common column", df1.columns)
+      # Get the common column names from the user
+    common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
+    common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
     
-    # Merge the dataframes on the selected common column
-    df_merged = merge_dataframes(df1, df2, common_column)
+    # Merge the dataframes on the selected common columns
+    df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
     
     # Display the merged dataframe
     st.markdown("## Merged dataframe")
