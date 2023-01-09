@@ -35,3 +35,6 @@ if st.sidebar.button("Download"):
 
     # Add the download link to the sidebar
     st.sidebar.markdown(f'<a href="temp_file" download>Download {file_format.upper()}</a>', unsafe_allow_html=True)
+
+# Run the Streamlit app
+st.run()
