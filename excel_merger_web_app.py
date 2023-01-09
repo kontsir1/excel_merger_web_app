@@ -12,13 +12,13 @@ if file1 is not None and file2 is not None:
     df2 = pd.read_csv(file2)
 
     # Display the DataFrames
-    st.dataframe(df1)
-    st.dataframe(df2)
+    st.write(df1)
+    st.write(df2)
 
     # Create a button to merge the DataFrames
     if st.button('Merge files'):
         merged_df = pd.merge(df1, df2)
-        st.dataframe(merged_df)
+        st.write(merged_df)
 
         # Create a button to download the merged DataFrame
         st.download_button('Download merged file', 'merged.csv', merged_df.to_csv())
