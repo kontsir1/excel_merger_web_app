@@ -40,9 +40,12 @@ st.title("File Merger")
 file1 = st.file_uploader("Upload first file")
 file2 = st.file_uploader("Upload second file")
 
-df1 = pd.read_csv(file1)
-df2 = pd.read_csv(file2)
-merged = pd.merge(df1, df2)
+if file1 is not None and file2 is not None:
+    df1 = pd.read_csv(file1)
+    df2 = pd.read_csv(file2)
+    merged = pd.merge(df1, df2)
+else:
+    st.write("Please upload both files")
 
 column = st.selectbox("Select column to merge on", merged.columns)
 
