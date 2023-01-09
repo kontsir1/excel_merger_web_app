@@ -42,7 +42,7 @@ if file_one and file_two:
     
     # Add a download button to the sidebar
     st.sidebar.markdown("## Download merged dataframe")
-    if st.sidebar        
+    if st.sidebar:        
         # Add a download button to the sidebar
         st.sidebar.markdown("## Download merged dataframe")
         if st.sidebar.button("Download CSV"):
