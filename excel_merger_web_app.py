@@ -5,28 +5,23 @@ import base64
 
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-def merge_files(file1, file2):
-    # Check if file1 is a CSV file
-    if file1.filename.endswith(".csv"):
-        df1 = pd.read_csv(file1)
-    # Check if file1 is an Excel file
-    elif file1.filename.endswith(".xlsx"):
-        df1 = pd.read_excel(file1)
-    else:
-        st.error("Unsupported file type for file1. Please upload a CSV or Excel file.")
-        return
+def merge_files(files):
+    merged = None
+    for file in files:
+        # Check if file is a CSV file
+        if file.filename.endswith(".csv"):
+            df = pd.read_csv(file)
+        # Check if file is an Excel file
+        elif file.filename.endswith(".xlsx"):
+            df = pd.read_excel(file)
+        else:
+            st.error("Unsupported file type. Please upload a CSV or Excel file.")
+            return
 
-    # Check if file2 is a CSV file
-    if file2.filename.endswith(".csv"):
-        df2 = pd.read_csv(file2)
-    # Check if file2 is an Excel file
-    elif file2.filename.endswith(".xlsx"):
-        df2 = pd.read_excel(file2)
-    else:
-        st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
-        return
-
-    merged = pd.merge(df1, df2, how='inner')
+        if merged is None:
+            merged = df
+        else:
+            merged = pd.merge(merged, df, how='inner')
     
     return merged
 
@@ -50,13 +45,10 @@ def download_file(data, file_format):
 
 st.title("File Merger")
 
-file1 = st.sidebar.file_uploader("Upload first file")
-file2 = st.sidebar.file_uploader("Upload second file")
-
-
+files = st.sidebar.file_uploader("Upload files to merge", type=["csv", "xlsx"], multiple=True)
 
 if st.sidebar.button("Merge files"):
-    merged = merge_files(file1, file2)
+    merged = merge_files(files)
     st.dataframe(merged)
 
 if st.sidebar.button("Download merged file"):
