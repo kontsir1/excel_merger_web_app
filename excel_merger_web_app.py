@@ -1,65 +1,37 @@
-# pip install openpyxl
-import pandas as pd
 import streamlit as st
-import zipfile
-import base64
-import os
+import pandas as pd
 
-# Web App Title
-st.markdown('''
-# **Excel File Merger**
+# Allow the user to upload multiple CSV or XLSX files
+uploaded_files = st.sidebar.file_uploader("Select files to merge", type=["csv", "xlsx"], multiple=True)
 
-This is the **Excel File Merger App** created in Python using the Streamlit library.
+# Create a submit button that the user can click to trigger the merge
+if st.sidebar.button("Submit"):
+    # Initialize an empty list to store the dataframes
+    dataframes = []
 
-**Credit:** App built in `Python` + `Streamlit` by [Chanin Nantasenamat](https://medium.com/@chanin.nantasenamat) (aka [Data Professor](http://youtube.com/dataprofessor))
+    # Iterate over the uploaded files
+    for file in uploaded_files:
+        # Read the file into a dataframe
+        df = pd.read_csv(file) if file.endswith(".csv") else pd.read_excel(file)
 
----
-''')
+        # Add the dataframe to the list
+        dataframes.append(df)
 
-# Excel file merge function
-def excel_file_merge(zip_file_name):
-    df = pd.DataFrame()
-    archive = zipfile.ZipFile(zip_file_name, 'r')
-    with zipfile.ZipFile(zip_file_name, "r") as f:
-        for file in f.namelist():
-          xlfile = archive.open(file)
-          if file.endswith('.xlsx'):
-            # Add a note indicating the file name that this dataframe originates from
-            df_xl = pd.read_excel(xlfile, engine='openpyxl')
-            df_xl['Note'] = file
-            # Appends content of each Excel file iteratively
-            df = df.append(df_xl, ignore_index=True)
-    return df
+    # Merge the dataframes on the selected column
+    merge_column = st.sidebar.selectbox("Select the merge column", dataframes[0].columns)
+    merged_data = pd.concat(dataframes, on=merge_column)
 
-# Upload CSV data
-with st.sidebar.header('1. Upload your ZIP file'):
-    uploaded_file = st.sidebar.file_uploader("Excel-containing ZIP file", type=["zip"])
-    st.sidebar.markdown("""
-[Example ZIP input file](https://github.com/dataprofessor/excel-file-merge-app/raw/main/nba_data.zip)
-""")
+    # Display the merged data in the main panel of the UI
+    st.write(merged_data)
 
-# File download
-def filedownload(df):
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:file/csv;base64,{b64}" download="merged_file.csv">Download Merged File as CSV</a>'
-    return href
+# Create a download button that the user can click to download the merged data
+if st.sidebar.button("Download"):
+    # Determine the file format based on the file extension
+    file_format = "csv" if st.sidebar.radio("Format", ["CSV", "XLSX"]) == "CSV" else "xlsx"
 
-def xldownload(df):
-    df.to_excel('data.xlsx', index=False)
-    data = open('data.xlsx', 'rb').read()
-    b64 = base64.b64encode(data).decode('UTF-8')
-    #b64 = base64.b64encode(xl.encode()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:file/xls;base64,{b64}" download="merged_file.xlsx">Download Merged File as XLSX</a>'
-    return href
+    # Create a temporary file to store the merged data
+    with st.spinner("Saving file..."):
+        temp_file = merged_data.to_csv() if file_format == "csv" else merged_data.to_excel()
 
-# Main panel
-if st.sidebar.button('Submit'):
-    #@st.cache
-    df = excel_file_merge(uploaded_file)
-    st.header('**Merged data**')
-    st.write(df)
-    st.markdown(filedownload(df), unsafe_allow_html=True)
-    st.markdown(xldownload(df), unsafe_allow_html=True)
-else:
-    st.info('Awaiting for ZIP file to be uploaded.')
+    # Add the download link to the sidebar
+    st.sidebar.markdown(f'<a href="temp_file" download>Download {file_format.upper()}</a>', unsafe_allow_html=True)
