@@ -78,8 +78,7 @@ else:
         # create a new dataframe with only the selected columns
         filtered_df = merged_df[selected_columns]
 
-# add a download button for the user to download the merged file in either xlsx or c
-csv format
+# add a download button for the user to download the merged file in either xlsx or csv format
 if st.button("Download file"):
     file_format = st.selectbox("Select file format", ["xlsx", "csv"])
     if file_format == "xlsx":
