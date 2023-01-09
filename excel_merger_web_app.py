@@ -40,28 +40,15 @@ with st.sidebar.header('1. Upload your ZIP file'):
 [Example ZIP input file](https://github.com/dataprofessor/excel-file-merge-app/raw/main/nba_data.zip)
 """)
 
-# Select column for merge
-with st.sidebar.header('2. Select the column for merge'):
-    column = st.sidebar.selectbox("Column", df.columns)
-
-# File download
-def filedownload(df):
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:file/csv;base64,{b64}" download="merged_file.csv">Download Merged File as CSV</a>'
-    return href
-
-def xldownload(df):
-    df.to_excel('data.xlsx', index=False)
-    data = open('data.xlsx', 'rb').read()
-    b64 = base64.b64encode(data).decode('UTF-8')
-    #b64 = base64.b64encode(xl.encode()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:file/xls;base64,{b64}" download="merged_file.xlsx">Download Merged File as XLSX</a>'
-    return href
-
 # Main panel
 if st.sidebar.button('Submit'):
     #@st.cache
+    df = excel_file_merge(uploaded_file)
+    
+    # Select column for merge
+    with st.sidebar.header('2. Select the column for merge'):
+        column = st.sidebar.selectbox("Column", df.columns)
+    
     df = excel_file_merge(uploaded_file, column)
     st.header('**Merged data**')
     st.write(df)
@@ -69,4 +56,3 @@ if st.sidebar.button('Submit'):
     st.markdown(xldownload(df), unsafe_allow_html=True)
 else:
     st.info('Awaiting for ZIP file to be uploaded.')
-
