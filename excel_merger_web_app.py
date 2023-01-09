@@ -59,7 +59,6 @@ if st.sidebar.button("Merge files"):
     merged = merge_files(uploaded_files[0], uploaded_files[1])
     st.dataframe(merged)
 
-
 if st.sidebar.button("Download merged file"):
     format = st.sidebar.radio("Select format", ["CSV", "XLSX"])
     download_file(merged, format)
