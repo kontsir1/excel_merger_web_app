@@ -26,42 +26,36 @@ if file_one and file_two:
     # Ask the user whether they want to delete rows from the first dataframe
     delete_rows_df1 = st.checkbox("Delete rows from first dataframe")
     if delete_rows_df1:
-        # Get the index of the rows to delete from the first dataframe
-        rows_to_delete_df1 = st.multiselect("Select rows to delete from first dataframe", df1.index)
-        # Delete the selected rows from the first dataframe
-        df1 = df1.drop(rows_to_delete_df1)
+        # Get the index range of the rows to delete from the first dataframe
+        start_row_df1 = st.number_input("Start row", max_value=df1.shape[0])
+        end_row_df1 = st.number_input("End row", max_value=df1.shape[0])
+        # Delete the specified range of rows from the first dataframe
+        df1 = df1.drop(range(start_row_df1, end_row_df1+1))
 
     # Ask the user whether they want to delete rows from the second dataframe
     delete_rows_df2 = st.checkbox("Delete rows from second dataframe")
     if delete_rows_df2:
-        # Get the index of the rows to delete from the second dataframe
-        rows_to_delete_df2 = st.multiselect("Select rows to delete from second dataframe", df2.index)
-        # Delete the selected rows from the second dataframe
-        df2 = df2.drop(rows_to_delete_df2)
-    
+        # Get the index range of the rows to delete from the second dataframe
+        start_row_df2 = st.number_input("Start row", max_value=df2.shape[0])
+        end_row_df2 = st.number_input("End row", max_value=df2.shape[0])
+        # Delete the specified range of rows from the second dataframe
+        df2 = df2.drop(range(start_row_df2, end_row_df2+1))
+
     # Display the two dataframes side by side
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("## First file")
-        st.write(df1.head(10))
+        st.write(df1)
     with col2:
         st.markdown("## Second file")
-        st.write(df2.head(10))
+        st.write(df2)
     
     # Get the common column names from the user
     common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
     common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
     
-    # Check if either common column is not present in both dataframes
-    if common_column1 not in df1.columns or common_column2 not in df2.columns:
-        st.error("Error: One or both of the selected common columns are not present in both dataframes.")
-    
     # Merge the dataframes on the selected common columns
     df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
-    
-    # Check if the merged dataframe is empty
-    if df_merged.empty:
-        st.error("Error: No common rows found between the two dataframes.")
     
     # Display the merged dataframe
     st.markdown("## Merged dataframe")
