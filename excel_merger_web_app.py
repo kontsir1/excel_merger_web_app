@@ -19,7 +19,7 @@ def merge_excel_files(file_list, merge_column):
 # Main function
 def main():
     # Allow user to upload files
-    uploaded_files = st.file_uploader("Upload excel files to merge", type=["xls", "xlsx", "csv"])
+    uploaded_files = st.file_uploader("Upload excel files to merge", type=["xls", "xlsx", "csv"], multiple=True)
     
     if uploaded_files is not None:
         # Get list of columns to include in merged file
