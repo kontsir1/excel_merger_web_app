@@ -8,13 +8,6 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 
 st.title("File Merger")
 
-if file is not None:
-
-    df= pd.read_csv(file)
-
-    st.write(df)
-
-
 
 #adding a file uploader to accept multiple CSV files
 
