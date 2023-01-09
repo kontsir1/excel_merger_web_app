@@ -1,22 +1,17 @@
 import streamlit as st
 import pandas as pd
 
-st.sidebar.markdown("# Select two files")
+st.sidebar.markdown("# Select files")
 
-# Use the file uploader to select the first file
-file_one = st.sidebar.file_uploader("Upload first file")
+# Use the file uploader to select multiple files
+files = st.sidebar.file_uploader("Upload files", type=["csv", "xlsx"], accept_multiple_files=True)
 
-# Use the file uploader to select the second file
-file_two = st.sidebar.file_uploader("Upload second file")
+# Check if any files are uploaded
+if files:
+    # Read the files as pandas dataframes
+    dfs = [pd.read_csv(f) if f.endswith(".csv") else pd.read_excel(f) for f in files]
 
-# Check if both files are uploaded
-if file_one and file_two:
-    # Read both files as pandas dataframes
-    df1 = pd.read_csv(file_one)
-    df2 = pd.read_csv(file_two)
-
-    # Display the two dataframes side by side
-    st.markdown("## First file")
-    st.write(df1)
-    st.markdown("## Second file")
-    st.write(df2)
+    # Display the dataframes side by side
+    for i, df in enumerate(dfs):
+        st.markdown(f"## File {i+1}")
+        st.write(df)
