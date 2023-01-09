@@ -29,7 +29,6 @@ if file_one and file_two:
     # Check if either dataframe is empty
     if df1.empty or df2.empty:
         st.error("Error: One or both of the selected files are empty.")
-        return
     
     # Display the two dataframes side by side
     col1, col2 = st.columns(2)
