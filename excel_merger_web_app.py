@@ -20,13 +20,14 @@ def merge_excel_files(excel_files, merge_column):
 excel_files = st.file_uploader("Select excel files to merge", type=["xlsx"])
 
 # display the header of each imported file
-for file in excel_files:
-    try:
-        df = pd.read_excel(file)
-        st.write(df.head())
-    except Exception as e:
-        st.write("Error: Invalid file selected")
-        st.write(e)
+if excel_files:
+    for file in excel_files:
+        try:
+            df = pd.read_excel(file)
+            st.write(df.head())
+        except Exception as e:
+            st.write("Error: Invalid file selected")
+            st.write(e)
 
 # add a dropdown menu for the user to select the column on which to merge the excel files
 if excel_files:
@@ -67,7 +68,7 @@ else:
         except Exception as e:
             st.write("Error: Invalid merge column selected")
             st.write(e)
-
+     
         # display the finalised file
         st.dataframe(merged_df)
 
@@ -94,3 +95,6 @@ if st.button("Download file"):
 
         # download the csv file
         st.download("merged_file.csv")
+
+
+      
