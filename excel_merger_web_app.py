@@ -4,14 +4,10 @@ import base64
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     # Merge the two dataframes on the specified common columns
-    try:
-        df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
-    except ValueError:
-        st.error("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
-        return
+    df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
     
     # Drop one of the common columns
-    #df_merged.drop(common_column1, axis=1, inplace=True)
+    df_merged.drop(common_column1, axis=1, inplace=True)
     
     return df_merged
 
@@ -26,9 +22,22 @@ if file_one and file_two:
     # Read both files as pandas dataframes
     df1 = pd.read_csv(file_one)
     df2 = pd.read_csv(file_two)
-    # Check if either dataframe is empty
-    if df1.empty or df2.empty:
-        st.error("Error: One or both of the selected files are empty.")
+
+    # Ask the user whether they want to delete rows from the first dataframe
+    delete_rows_df1 = st.checkbox("Delete rows from first dataframe")
+    if delete_rows_df1:
+        # Get the index of the rows to delete from the first dataframe
+        rows_to_delete_df1 = st.multiselect("Select rows to delete from first dataframe", df1.index)
+        # Delete the selected rows from the first dataframe
+        df1 = df1.drop(rows_to_delete_df1)
+
+    # Ask the user whether they want to delete rows from the second dataframe
+    delete_rows_df2 = st.checkbox("Delete rows from second dataframe")
+    if delete_rows_df2:
+        # Get the index of the rows to delete from the second dataframe
+        rows_to_delete_df2 = st.multiselect("Select rows to delete from second dataframe", df2.index)
+        # Delete the selected rows from the second dataframe
+        df2 = df2.drop(rows_to_delete_df2)
     
     # Display the two dataframes side by side
     col1, col2 = st.columns(2)
