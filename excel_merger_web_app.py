@@ -53,12 +53,12 @@ def download_file(data, file_format):
 
 st.title("File Merger")
 
-file1 = st.sidebar.file_uploader("Upload first file")
-file2 = st.sidebar.file_uploader("Upload second file")
+uploaded_files = st.sidebar.file_uploader("Upload files to merge", type=["xlsx", "csv"], accept_multiple=True)
 
 if st.sidebar.button("Merge files"):
-    merged = merge_files(file1, file2)
+    merged = merge_files(uploaded_files[0], uploaded_files[1])
     st.dataframe(merged)
+
 
 if st.sidebar.button("Download merged file"):
     format = st.sidebar.radio("Select format", ["CSV", "XLSX"])
