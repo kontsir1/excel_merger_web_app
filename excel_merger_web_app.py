@@ -6,6 +6,11 @@ import base64
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 def merge_files(file1, file2):
+    # Check if file1 or file2 is None
+    if file1 is None or file2 is None:
+        st.error("Please upload both files before merging.")
+        return
+
     # Check if file1 is a CSV file
     if file1.filename.endswith(".csv"):
         df1 = pd.read_csv(file1)
