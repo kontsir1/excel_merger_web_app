@@ -26,7 +26,7 @@ def merge_files(file1, file2, column, selected_columns):
         st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
         return
 
-    merged = pd.merge(df1, df2, on=column)
+    merged = pd.merge(df1, df2, on=column, how='inner')
     if selected_columns:
         merged = merged[selected_columns]
     return merged
