@@ -45,10 +45,16 @@ def download_file(data, file_format):
 
 st.title("File Merger")
 
-files = st.sidebar.file_uploader("Upload files to merge", type=["csv", "xlsx"], multiple=True)
+uploaded_files = []
+while True:
+    file = st.sidebar.file_uploader("Upload file to merge", type=["csv", "xlsx"])
+    if file:
+        uploaded_files.append(file)
+    else:
+        break
 
 if st.sidebar.button("Merge files"):
-    merged = merge_files(files)
+    merged = merge_files(uploaded_files)
     st.dataframe(merged)
 
 if st.sidebar.button("Download merged file"):
