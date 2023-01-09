@@ -57,7 +57,12 @@ st.title("File Merger")
 
 file1 = st.sidebar.file_uploader("Upload first file")
 file2 = st.sidebar.file_uploader("Upload second file")
-column = st.sidebar.selectbox("Select column to merge on", [])
+
+# Get list of column names from file1 dataframe
+column_options = list(pd.read_csv(file1).columns)
+
+# Allow user to select column
+column = st.sidebar.selectbox("Select column to merge on", column_options)
 
 select_columns = st.sidebar.checkbox("Select specific columns to include in merged file")
 
@@ -73,3 +78,4 @@ if st.sidebar.button("Merge files"):
 if st.sidebar.button("Download merged file"):
     format = st.sidebar.radio("Select format", ["CSV", "XLSX"])
     download_file(merged, format)
+
