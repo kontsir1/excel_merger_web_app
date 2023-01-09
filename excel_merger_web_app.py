@@ -5,7 +5,7 @@ import base64
 
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-def merge_files(file1, file2, column, selected_columns):
+def merge_files(file1, file2):
     # Check if file1 is a CSV file
     if file1.filename.endswith(".csv"):
         df1 = pd.read_csv(file1)
@@ -26,15 +26,10 @@ def merge_files(file1, file2, column, selected_columns):
         st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
         return
 
-    merged = pd.merge(df1, df2, on=column)
-    if selected_columns:
-        merged = merged[selected_columns]
+    merged = pd.merge(df1, df2, how='inner')
+    
     return merged
 
-def select_columns(dataframe):
-    all_columns = list(dataframe.columns)
-    selected_columns = st.multiselect("Select columns to include in merged file", all_columns)
-    return selected_columns
 
 def download_file(data, file_format):
     if file_format == "CSV":
@@ -57,17 +52,11 @@ st.title("File Merger")
 
 file1 = st.sidebar.file_uploader("Upload first file")
 file2 = st.sidebar.file_uploader("Upload second file")
-column = st.sidebar.selectbox("Select column to merge on", [])
 
-select_columns = st.sidebar.checkbox("Select specific columns to include in merged file")
 
-if select_columns:
-    selected_columns = select_columns(merged)
-else:
-    selected_columns = None
 
 if st.sidebar.button("Merge files"):
-    merged = merge_files(file1, file2, column, selected_columns)
+    merged = merge_files(file1, file2)
     st.dataframe(merged)
 
 if st.sidebar.button("Download merged file"):
