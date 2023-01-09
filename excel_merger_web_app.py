@@ -57,7 +57,7 @@ st.title("File Merger")
 
 file1 = st.file_uploader("Upload first file")
 file2 = st.file_uploader("Upload second file")
-column = st.selectbox("Select column to merge on", merged.columns)
+column = st.selectbox("Select column to merge on", [])
 
 select_columns = st.checkbox("Select specific columns to include in merged file")
 
