@@ -5,7 +5,7 @@ import base64
 
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-def merge_files(file1, file2, column):
+def merge_files(file1, file2):
     # Check if file1 is a CSV file
     if file1.filename.endswith(".csv"):
         df1 = pd.read_csv(file1)
@@ -26,7 +26,7 @@ def merge_files(file1, file2, column):
         st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
         return
 
-    merged = pd.merge(df1, df2, on=column, how='inner')
+    merged = pd.merge(df1, df2, how='inner')
     return merged
 
 def download_file(data, file_format):
