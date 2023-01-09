@@ -1,7 +1,7 @@
 import streamlit as str
 import pandas as pd
 
-st.sidebar.markdown("# Select two files")
+str.sidebar.markdown("# Select two files")
 
 # Use the file uploader to select the first file
 file_one = str.sidebar.file_uploader("Upload first file")
