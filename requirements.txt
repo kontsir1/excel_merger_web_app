@@ -1,5 +1,5 @@
 pandas
 streamlit
-base58
+base64
 xlsxwriter
 openpyxl
