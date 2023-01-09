@@ -6,12 +6,29 @@ import base64
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 def merge_files(file1, file2):
-    print(f'file1: {file1}')
-    print(f'file1.filename: {file1.filename}')
-    # Check if file1 or file2 is None
-    if file1 is None or file2 is None:
-        st.error("Please upload both files before merging.")
+    # Check if file1 is a CSV file
+    if file1.filename.endswith(".csv"):
+        df1 = pd.read_csv(file1)
+    # Check if file1 is an Excel file
+    elif file1.filename.endswith(".xlsx"):
+        df1 = pd.read_excel(file1)
+    else:
+        st.error("Unsupported file type for file1. Please upload a CSV or Excel file.")
         return
+
+    # Check if file2 is a CSV file
+    if file2.filename.endswith(".csv"):
+        df2 = pd.read_csv(file2)
+    # Check if file2 is an Excel file
+    elif file2.filename.endswith(".xlsx"):
+        df2 = pd.read_excel(file2)
+    else:
+        st.error("Unsupported file type for file2. Please upload a CSV or Excel file.")
+        return
+
+    merged = pd.merge(df1, df2, how='inner')
+    
+    return merged
 
 
 def download_file(data, file_format):
@@ -35,6 +52,8 @@ st.title("File Merger")
 
 file1 = st.sidebar.file_uploader("Upload first file")
 file2 = st.sidebar.file_uploader("Upload second file")
+
+
 
 if st.sidebar.button("Merge files"):
     merged = merge_files(file1, file2)
