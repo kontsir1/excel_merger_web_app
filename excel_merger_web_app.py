@@ -1,39 +1,52 @@
+# Import necessary libraries
 import streamlit as st
+import pandas as pd
 
-st.title('Merge Excel Files')
+# Merge excel files
+def merge_excel_files(file_list, merge_column):
+    # Read in each file
+    df_list = []
+    for file in file_list:
+        df = pd.read_excel(file)
+        df_list.append(df)
+    
+    # Merge files on specified column
+    merged_df = pd.concat(df_list, ignore_index=True, sort=False)
+    
+    # Return merged dataframe
+    return merged_df
 
-st.write('Select the column to use as the key for merging:')
-key_column = st.selectbox('Column:', ['A', 'B', 'C'])
+# Main function
+def main():
+    # Allow user to upload files
+    uploaded_files = st.file_uploader("Upload excel files to merge", type=["xls", "xlsx", "csv"])
+    
+    if uploaded_files is not None:
+        # Get list of columns to include in merged file
+        all_columns = pd.read_excel(uploaded_files[0]).columns
+        selected_columns = st.multiselect("Select columns to include in merged file", all_columns)
+        
+        # Merge files
+        merged_df = merge_excel_files(uploaded_files, selected_columns)
+        
+        # Display merged data
+        st.dataframe(merged_df)
+        
+        # Allow user to download merged file
+        file_format = st.selectbox("Select file format for download", ["xls", "xlsx", "csv"])
+        if file_format == "xls":
+            st.write("Downloading xls file...")
+            merged_df.to_excel("merged_file.xls")
+            st.download("merged_file.xls")
+        elif file_format == "xlsx":
+            st.write("Downloading xlsx file...")
+            merged_df.to_excel("merged_file.xlsx")
+            st.download("merged_file.xlsx")
+        elif file_format == "csv":
+            st.write("Downloading csv file...")
+            merged_df.to_csv("merged_file.csv")
+            st.download("merged_file.csv")
 
-st.write('Select the columns to export:')
-columns_to_export = st.multiselect('Columns:', ['A', 'B', 'C'])
-
-st.write('Select the input files:')
-files = st.file_uploader('Files:', type=['xls', 'xlsx', 'csv'])
-
-if files:
-    # Merge the files using pandas
-    df = pd.concat(map(pd.read_excel, files), ignore_index=True, sort=False)
-
-    # Select the columns to export
-    df = df[columns_to_export]
-
-    # Display the first 20 rows
-    st.dataframe(df.head(20))
-
-    # Add a download button
-    st.write('Click the button below to download the merged file:')
-    file_format = st.selectbox('Format:', ['xls', 'xlsx', 'csv'])
-    if st.button('Download'):
-        if file_format == 'xls':
-            with open('merged.xls', 'wb') as f:
-                f.write(df.to_excel())
-            st.success('File downloaded')
-        elif file_format == 'xlsx':
-            with open('merged.xlsx', 'wb') as f:
-                f.write(df.to_excel())
-            st.success('File downloaded')
-        elif file_format == 'csv':
-            with open('merged.csv', 'w') as f:
-                f.write(df.to_csv())
-            st.success('File downloaded')
+# Run main function
+if __name__ == '__main__':
+    main()
