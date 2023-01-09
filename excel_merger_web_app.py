@@ -17,8 +17,6 @@ if file_one and file_two:
 
     # Display the two dataframes side by side
     st.markdown("## First file")
-    with st.column("one-half"):
-        st.write(df1)
+    st.dataframe(df1)
     st.markdown("## Second file")
-    with st.column("one-half"):
-        st.write(df2)
+    st.dataframe(df2)
