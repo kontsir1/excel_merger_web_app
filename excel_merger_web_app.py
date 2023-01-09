@@ -1,24 +1,22 @@
 import streamlit as st
 import pandas as pd
 
-# Allow users to upload two files
-file1 = st.file_uploader('Select the first file')
-file2 = st.file_uploader('Select the second file')
+st.sidebar.markdown("# Select two files")
 
-# If both files are uploaded, display them and create a button to merge them
-if file1 is not None and file2 is not None:
-    # Read the files into DataFrames
-    df1 = pd.read_csv(file1)
-    df2 = pd.read_csv(file2)
+# Use the file uploader to select the first file
+file_one = st.sidebar.file_uploader("Upload first file")
 
-    # Display the DataFrames
+# Use the file uploader to select the second file
+file_two = st.sidebar.file_uploader("Upload second file")
+
+# Check if both files are uploaded
+if file_one and file_two:
+    # Read both files as pandas dataframes
+    df1 = pd.read_csv(file_one)
+    df2 = pd.read_csv(file_two)
+
+    # Display the two dataframes side by side
+    st.markdown("## First file")
     st.write(df1)
+    st.markdown("## Second file")
     st.write(df2)
-
-    # Create a button to merge the DataFrames
-    if st.button('Merge files'):
-        merged_df = pd.merge(df1, df2)
-        st.write(merged_df)
-
-        # Create a button to download the merged DataFrame
-        st.download_button('Download merged file', 'merged.csv', merged_df.to_csv())
