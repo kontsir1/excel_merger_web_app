@@ -66,10 +66,10 @@ if select_columns:
 else:
     selected_columns = None
 
-if st.button("Merge files"):
+if st.sidebar.button("Merge files"):
     merged = merge_files(file1, file2, column, selected_columns)
     st.dataframe(merged)
 
-if st.button("Download merged file"):
+if st.sidebar.button("Download merged file"):
     format = st.sidebar.radio("Select format", ["CSV", "XLSX"])
     download_file(merged, format)
