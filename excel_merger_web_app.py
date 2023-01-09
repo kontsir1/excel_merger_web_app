@@ -40,10 +40,10 @@ def download_file(data, file_format):
     if file_format == "CSV":
         csv = data.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-        href = f'<a href="data:file/csv;base64,{b64}" download="merged_file.csv">Download CSV File</a>'
+        href = f'<a href="data:file/csv;base64,{b64}" download "merged_file.csv">Download CSV File</a>'
         st.markdown(href, unsafe_allow_html=True)
     elif file_format == "XLSX":
-        xlsx = openpyxl.Workbook()        
+        xlsx = openpyxl.Workbook()
         sheet = xlsx.active
         for r in dataframe_to_rows(data, index=False, header=True):
             sheet.append(r)
@@ -56,7 +56,16 @@ def download_file(data, file_format):
 st.title("File Merger")
 
 # Allow the user to select multiple files
-files = st.sidebar.file_uploader("Upload files", multiple=True)
+file1 = st.sidebar.file_uploader("Upload first file")
+file2 = st.sidebar.file_uploader("Upload second file")
+file3 = st.sidebar.file_uploader("Upload third file")
+# ... and so on
+
+# Store the files in a list
+files = [file1, file2, file3]
+
+# Remove any None elements from the list
+files = [f for f in files if f is not None]
 
 # Get list of column names from the first file
 column_options = list(pd.read_csv(files[0]).columns)
@@ -66,12 +75,7 @@ column = st.sidebar.selectbox("Select column to merge on", column_options)
 
 select_columns = st.sidebar.checkbox("Select specific columns to include in merged file")
 
-if select_columns:
-    selected_columns = select_columns(merged)
-else:
-    selected_columns = None
-
-if st.sidebar.button("Merge files"):
+if select_
     merged = merge_files(files, column, selected_columns)
     st.dataframe(merged)
 
