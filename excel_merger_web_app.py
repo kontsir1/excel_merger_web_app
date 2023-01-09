@@ -36,7 +36,7 @@ else:
     st.write("Error: No files selected")
 
 # add a validation check to ensure that the user selects at least two excel files to merge
-if len(excel_files) < 2:
+if excel_files and len(excel_files) < 2:
     st.write("Error: Please select at least two excel files to merge")
 else:
     # add a validation check to ensure that the selected merge column is present in all of the excel files
@@ -49,7 +49,7 @@ else:
 
         # add a check to ensure that the selected merge column has the same data type in all of the files
         if df[merge_column].dtype != merged_df[merge_column].dtype:
-            valid_merge_column = False
+                        valid_merge_column = False
             st.write("Error: Selected merge column has different data types in the different files")
 
     # call the merge_excel_files function and pass in the excel files and the selected merge column as arguments
@@ -68,7 +68,7 @@ else:
         except Exception as e:
             st.write("Error: Invalid merge column selected")
             st.write(e)
-     
+
         # display the finalised file
         st.dataframe(merged_df)
 
@@ -78,7 +78,8 @@ else:
         # create a new dataframe with only the selected columns
         filtered_df = merged_df[selected_columns]
 
-# add a download button for the user to download the merged file in either xlsx or csv format
+# add a download button for the user to download the merged file in either xlsx or c
+csv format
 if st.button("Download file"):
     file_format = st.selectbox("Select file format", ["xlsx", "csv"])
     if file_format == "xlsx":
@@ -96,5 +97,3 @@ if st.button("Download file"):
         # download the csv file
         st.download("merged_file.csv")
 
-
-      
