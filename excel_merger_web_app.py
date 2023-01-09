@@ -1,13 +1,13 @@
-import streamlit as str
+import steamlit as st
 import pandas as pd
 
-str.sidebar.markdown("# Select two files")
+st.sidebar.markdown("# Select two files")
 
 # Use the file uploader to select the first file
-file_one = str.sidebar.file_uploader("Upload first file")
+file_one = st.sidebar.file_uploader("Upload first file")
 
 # Use the file uploader to select the second file
-file_two = str.sidebar.file_uploader("Upload second file")
+file_two = st.sidebar.file_uploader("Upload second file")
 
 # Check if both files are uploaded
 if file_one and file_two:
@@ -16,10 +16,10 @@ if file_one and file_two:
     df2 = pd.read_csv(file_two)
 
     # Display the two dataframes side by side
-    col1, col2 = str.columns(2)
-    str.markdown("## First file")
+    col1, col2 = st.columns(2)
     with col1:
-        str.write(df1)
-    str.markdown("## Second file")
+        st.markdown("## First file")
+        st.write(df1)
     with col2:
-        str.write(df2)
+        st.markdown("## Second file")
+        st.write(df2)
