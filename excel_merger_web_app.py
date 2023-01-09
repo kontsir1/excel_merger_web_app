@@ -7,8 +7,6 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     
     return df_merged
 
-st.sidebar.markdown("# Select two files")
-
 # Use the file uploader to select the first file
 file_one = st.sidebar.file_uploader("Upload first file")
 
@@ -29,8 +27,8 @@ if file_one and file_two:
     with col2:
         st.markdown("## Second file")
         st.write(df2)
-    ###### ABOVE THIS DO NOT DELETE #######
-      # Get the common column names from the user
+    
+    # Get the common column names from the user
     common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
     common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
     
