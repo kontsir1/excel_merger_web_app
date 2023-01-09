@@ -47,9 +47,9 @@ st.title("File Merger")
 
 uploaded_files = []
 while True:
-    file = st.sidebar.file_uploader("Upload file to merge", type=["csv", "xlsx"])
+    file = st.sidebar.file_uploader("Upload file to merge", type=["csv", "xlsx"], multiple=True)
     if file:
-        uploaded_files.append(file)
+        uploaded_files.extend(file)
     else:
         break
 
