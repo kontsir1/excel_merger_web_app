@@ -3,7 +3,7 @@ import pandas as pd
 
 def merge_dataframes(df1, df2):
     # Merge the two dataframes
-    df_merged = pd.merge(df1, df2, how='outer')
+    df_merged = pd.merge(df1, df2, how='inner')
     
     return df_merged
 
