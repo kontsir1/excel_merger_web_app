@@ -1,4 +1,4 @@
 pandas
 streamlit==1.15.0
-xlsxwriter
+xlsxwriter==3.0.4
 openpyxl
