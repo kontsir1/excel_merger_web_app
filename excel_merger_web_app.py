@@ -39,18 +39,20 @@ st.title("File Merger")
 
 file1 = st.file_uploader("Upload first file")
 file2 = st.file_uploader("Upload second file")
-column = st.selectbox("Select column to merge on", [])
+column = st.selectbox("Select column to merge on", merged.columns)
 
 select_columns = st.checkbox("Select specific columns to include in merged file")
 
+if select_columns:
+    selected_columns = select_columns(merged)
+else:
+    selected_columns = None
+
 if st.button("Merge files"):
     merged = merge_files(file1, file2, column, selected_columns)
-    if select_columns:
-        selected_columns = select_columns(merged)
-    else:
-        selected_columns = None
     st.dataframe(merged)
 
 if st.button("Download merged file"):
     format = st.radio("Select format", ["CSV", "XLSX"])
     download_file(merged, format)
+
