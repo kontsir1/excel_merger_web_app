@@ -53,7 +53,7 @@ def download_file(data, file_format):
 
 st.title("File Merger")
 
-uploaded_files = st.sidebar.file_uploader("Upload files to merge", type=["xlsx", "csv"], accept_multiple=True)
+uploaded_files = st.sidebar.file_uploader("Upload files to merge", type=["xlsx", "csv"], accept_multiple_files=True)
 
 if st.sidebar.button("Merge files"):
     merged = merge_files(uploaded_files[0], uploaded_files[1])
