@@ -65,10 +65,17 @@ if file_one and file_two:
     st.write(df_merged)
     
     # Add a download button to the sidebar
-    st.sidebar.markdown("## Download merged dataframe")
     if st.sidebar.button("Download CSV"):
         st.markdown("Clicked download button")
         csv = df_merged.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV File</a>'
         st.markdown(href, unsafe_allow_html=True)
+
+    if st.sidebar.button("Download XLSX"):
+        st.markdown("Clicked download button")
+        xlsx = df_merged.to_excel(index=False)
+        b64 = base64.b64encode(xlsx.encode()).decode()
+        href = f'<a href="data:file/xlsx;base64,{b64}" download="merged_data.xlsx">Download XLSX File</a>'
+        st.markdown(href, unsafe_allow_html=True)
+
