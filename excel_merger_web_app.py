@@ -62,7 +62,7 @@ def main():
         # Display the dataframes
         col1, col2 = st.columns(2)
         with col1:
-            st.subheader("{first_file_name}")
+            st.subheader(f"{first_file_name}")
             st.write(df1)
         with col2:
             st.subheader(f"## Second file: {second_file_name}")
