@@ -11,17 +11,15 @@ def read_files():
     if file_one and file_two:
         file_one_ext = file_one.name.split('.')[-1]
         file_two_ext = file_two.name.split('.')[-1]
-
+        header_row = st.sidebar.selectbox("Select the header row of the CSV file", list(range(1, 100)))
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
-                header_row = st.sidebar.selectbox("Select the header row of the CSV file", list(range(1, df1.shape[0])))
                 df1 = pd.read_csv(file_one, skiprows=header_row-1, skipinitialspace=True)
             else:
                 df1 = pd.read_excel(file_one)
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
-                header_row = st.sidebar.selectbox("Select the header row of the CSV file", list(range(1, df2.shape[0])))
                 df2 = pd.read_csv(file_two, skiprows=header_row-1, skipinitialspace=True)
             else:
                 df2 = pd.read_excel(file_two)
