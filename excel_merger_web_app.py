@@ -4,6 +4,17 @@ import base64
 import openpyxl
 from io import BytesIO
 
+def read_csv_strip(file, date_columns=[]):
+    df = pd.read_csv(file, parse_dates=date_columns)
+
+    # for each column
+    for col in df.columns:
+        # check if the columns contains string data
+        if pd.api.types.is_string_dtype(df[col]):
+            df[col] = df[col].str.strip()
+    df = df.replace({"":np.nan})
+    return df
+
 def read_files():
     """Read the first and second files as pandas dataframes"""
     file_one = st.sidebar.file_uploader("Upload first file")
@@ -14,18 +25,19 @@ def read_files():
 
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
-                df1 = pd.read_csv(file_one, skipinitialspace=True)
+                df1 = read_csv_strip(file_one)
             else:
                 df1 = pd.read_excel(file_one)
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
-                df2 = pd.read_csv(file_two, skipinitialspace=True)
+                df2 = read_csv_strip(file_two)
             else:
                 df2 = pd.read_excel(file_two)
         return df1, df2, file_one.name, file_two.name
     else:
         return None, None, None, None
+
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     """Merge the two dataframes on the specified common columns"""
