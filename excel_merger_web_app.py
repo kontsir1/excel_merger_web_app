@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.files as files
 import pandas as pd
 import base64
 import openpyxl
@@ -22,13 +21,9 @@ st.set_page_config(layout="wide")
 
 # Use the file uploader to select the first file
 file_one = st.sidebar.file_uploader("Upload first file")
-if file_one:
-    df1 = pd.read_csv(files.open(file_one))
 
 # Use the file uploader to select the second file
 file_two = st.sidebar.file_uploader("Upload second file")
-if file_two:
-    df2 = pd.read_csv(files.open(file_two))
 
 # Check if both files are uploaded
 if file_one and file_two:
@@ -91,4 +86,3 @@ if file_one and file_two:
         b64 = base64.b64encode(xlsx_data).decode()
         href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="merged_data.xlsx">Download XLSX File</a>'
         st.markdown(href, unsafe_allow_html=True)
-
