@@ -14,8 +14,8 @@ def read_files():
             df1 = pd.read_csv(file_one)
         else:
             df1 = pd.read_excel(file_one)
-    else:
-        return None, None, None
+        else:
+            return None, None, None, None
     file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
     if file_two:
         st.success("File uploaded successfully")
@@ -25,7 +25,7 @@ def read_files():
         else:
             df2 = pd.read_excel(file_two)
     else:
-        return None, None, None
+        return None, None, None, None
 
     if file_one and file_two:
         return df1, df2, file_one.name, file_two.name
