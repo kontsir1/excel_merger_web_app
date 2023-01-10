@@ -25,12 +25,21 @@ def delete_rows(df, start_row, end_row):
     """Delete specified rows from dataframe"""
     return df.drop(range(start_row, end_row+1))
 
-def export_dataframe(df, selected_column):  
-    """Export selected columns of dataframe as CSV"""
+def export_dataframe(df, selected_columns):  
+    """Export selected columns of dataframe as CSV and XLSX"""
+    # Export as CSV
     csv = df[selected_columns].to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
-    st.sidebar.markdown(href, unsafe_allow_html=True)
+    csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
+    st.sidebar.markdown(csv_href, unsafe_allow_html=True)
+
+    # Export as XLSX
+    xlsx_file = BytesIO()
+    df[selected_columns].to_excel(xlsx_file, index=False)
+    xlsx_file.seek(0)
+    xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
+    xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
+    st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
 def main():
     df1, df2, first_file_name, second_file_name = read_files()
@@ -71,6 +80,8 @@ def main():
 
         # Export dataframe as CSV
         if st.sidebar.button("Download CSV"):
+            export_dataframe(df_merged, selected_columns)
+        if st.sidebar.button("Download Excel"):
             export_dataframe(df_merged, selected_columns)
 
 if __name__ == "__main__":
