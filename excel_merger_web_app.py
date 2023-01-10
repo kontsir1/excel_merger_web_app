@@ -17,13 +17,15 @@ def read_files():
 
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
-                df1 = pd.read_csv(file_one, skipinitialspace=True, converters={col: remove_extra_whitespaces for col in df1.columns}, low_memory=False)
+                df1 = pd.read_csv(file_one, skipinitialspace=True, low_memory=False)
+                df1 = df1.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
             else:
                 df1 = pd.read_excel(file_one)
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
-                df2 = pd.read_csv(file_two, skipinitialspace=True, converters={col: remove_extra_whitespaces for col in df2.columns}, low_memory=False)
+                df2 = pd.read_csv(file_two, skipinitialspace=True, low_memory=False)
+                df2 = df2.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
             else:
                 df2 = pd.read_excel(file_two)
         return df1, df2, file_one.name, file_two.name
