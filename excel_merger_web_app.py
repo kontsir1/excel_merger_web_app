@@ -69,20 +69,21 @@ if file_one and file_two:
     st.markdown("## Merged dataframe")
     st.write(df_merged)
     
-    # Add a download button to the sidebar
-    if st.sidebar.button("Download CSV"):
-        st.markdown("Clicked download button")
-        csv = df_merged.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()
-        href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV File</a>'
-        st.markdown(href, unsafe_allow_html=True)
+    # Add a multi-select box to the sidebar to choose columns to export
+    selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
-    if st.sidebar.button("Download XLSX"):
-        st.markdown("Clicked download button")
-        xlsx_file = BytesIO()
-        df_merged.to_excel(xlsx_file, index=False)
-        xlsx_file.seek(0)
-        xlsx_data = xlsx_file.read()
-        b64 = base64.b64encode(xlsx_data).decode()
-        href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="merged_data.xlsx">Download XLSX File</a>'
-        st.markdown(href, unsafe_allow_html=True)
+if st.sidebar.button("Download CSV"):
+    st.markdown("Clicked download button")
+    csv = df_merged[selected_columns].to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV File</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
+if st.sidebar.button("Download Excel"):
+    st.markdown("Clicked download button")
+    excel_file = BytesIO()
+    df_merged[selected_columns].to_excel(excel_file, index=False)
+    excel_file.seek(0)
+    b64 = base64.b64encode(excel_file.read()).decode()
+    href = f'<a href="data:file/xlsx;base64,{b64}" download="merged_data.xlsx">Download Excel File</a>'
+    st.markdown(href, unsafe_allow_html=True)
