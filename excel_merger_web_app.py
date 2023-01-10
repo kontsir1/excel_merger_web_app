@@ -37,6 +37,11 @@ def delete_rows(df, start_row, end_row):
     """Delete specified rows from dataframe"""
     return df.drop(range(start_row, end_row+1))
 
+def drop_header_rows(df):
+    header_row = st.selectbox("Select the row number of the header", options=range(df.shape[0]))
+    df = df.iloc[header_row:, :]
+    return df
+
 def export_dataframe(df, selected_columns):  
     """Export selected columns of dataframe as CSV and XLSX"""
     # Export as CSV
@@ -58,7 +63,7 @@ def main():
     st.set_page_config(layout="wide")
     
     df1, df2, first_file_name, second_file_name = read_files()
-
+    
     if df1 is not None:
         # Delete rows from first dataframe
         if st.checkbox("Delete rows from first dataframe"):
@@ -66,11 +71,22 @@ def main():
             end_row = st.number_input("End row", max_value=df1.shape[0])
             df1 = delete_rows(df1, start_row, end_row)
 
-        # Delete rows from second dataframe
+        #drop header rows if needed
+        if st.checkbox("Drop rows above header in first dataframe"):
+            df1 = drop_header_rows(df1)
+
         if st.checkbox("Delete rows from second dataframe"):
             start_row = st.number_input("Start row", max_value=df2.shape[0])
             end_row = st.number_input("End row", max_value=df2.shape[0])
             df2 = delete_rows(df2, start_row, end_row)
+
+        #drop header rows if needed
+        if st.checkbox("Drop rows above header in second dataframe"):
+            df2 = drop_header_rows(df2)
+        st.dataframe(df1)
+        st.dataframe(df2)
+
+            
 
         # Display the dataframes
         col1, col2 = st.columns(2)
