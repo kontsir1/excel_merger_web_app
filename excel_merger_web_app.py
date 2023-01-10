@@ -49,10 +49,7 @@ def export_dataframe(df, selected_columns):
     xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
     st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
-def main():
-    # Use the full page instead
 
-                     
 def main():
     # Use the full page instead of a narrow central column
     st.set_page_config(layout="wide")
