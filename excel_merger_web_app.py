@@ -54,6 +54,9 @@ def export_dataframe(df, selected_columns):
     st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
 def main():
+    # Use the full page instead of a narrow central column
+    st.set_page_config(layout="wide")
+    
     df1, df2, first_file_name, second_file_name = read_files()
 
     if df1 is not None:
