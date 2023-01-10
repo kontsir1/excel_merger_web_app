@@ -33,10 +33,6 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     df_merged.drop(common_column1, axis=1, inplace=True)
     return df_merged
 
-def delete_rows(df, start_row, end_row):
-    """Delete specified rows from dataframe"""
-    return df.drop(range(start_row, end_row+1))
-
 def export_dataframe(df, selected_columns):  
     """Export selected columns of dataframe as CSV and XLSX"""
     # Export as CSV
@@ -54,24 +50,16 @@ def export_dataframe(df, selected_columns):
     st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
 def main():
+    # Use the full page instead
+
+                     
+def main():
     # Use the full page instead of a narrow central column
     st.set_page_config(layout="wide")
     
     df1, df2, first_file_name, second_file_name = read_files()
 
     if df1 is not None:
-        # Delete rows from first dataframe
-        if st.checkbox("Delete rows from first dataframe"):
-            start_row = st.number_input("Start row", max_value=df1.shape[0])
-            end_row = st.number_input("End row", max_value=df1.shape[0])
-            df1 = delete_rows(df1, start_row, end_row)
-
-        # Delete rows from second dataframe
-        if st.checkbox("Delete rows from second dataframe"):
-            start_row = st.number_input("Start row", max_value=df2.shape[0])
-            end_row = st.number_input("End row", max_value=df2.shape[0])
-            df2 = delete_rows(df2, start_row, end_row)
-
         # Display the dataframes
         col1, col2 = st.columns(2)
         with col1:
