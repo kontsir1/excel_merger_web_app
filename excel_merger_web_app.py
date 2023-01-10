@@ -17,7 +17,6 @@ def read_files():
                 df1 = pd.read_csv(file_one, skiprows=header_row-1, skipinitialspace=True)
             else:
                 df1 = pd.read_excel(file_one)
-        
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
                 df2 = pd.read_csv(file_two, skiprows=header_row-1, skipinitialspace=True)
