@@ -62,10 +62,10 @@ def main():
         # Display the dataframes
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown(f"## First file: {first_file_name}")
+            st.subheader(f"## First file: {first_file_name}")
             st.write(df1)
         with col2:
-            st.markdown(f"## Second file: {second_file_name}")
+            st.subheader(f"## Second file: {second_file_name}")
             st.write(df2)
 
         # Merge dataframes and select common columns
