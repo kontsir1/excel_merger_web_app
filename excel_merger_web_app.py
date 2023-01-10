@@ -6,8 +6,8 @@ from io import BytesIO
 
 def read_files():
     """Read the first and second files as pandas dataframes"""
-    file_one = st.sidebar.file_uploader("Upload first file")
-    file_two = st.sidebar.file_uploader("Upload second file")
+    file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
+    file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
     if file_one and file_two:
         file_one_ext = file_one.name.split('.')[-1]
         file_two_ext = file_two.name.split('.')[-1]
