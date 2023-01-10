@@ -21,6 +21,12 @@ st.set_page_config(layout="wide")
 
 # Use the file uploader to select the first file
 file_one = st.sidebar.file_uploader("Upload first file")
+if file_one:
+    df1 = pd.read_csv(file_one)
+    st.dataframe(df1,editable=True)
+    df1 = st.cache(df1) # cache the modified dataframe
+    st.write("Modified Dataframe")
+    st.write(df1)
 
 # Use the file uploader to select the second file
 file_two = st.sidebar.file_uploader("Upload second file")
