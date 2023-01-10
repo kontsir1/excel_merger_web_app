@@ -53,13 +53,9 @@ if file_one and file_two:
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("## First file: " + file_one.name)
-        file_size = file_one.getbuffer().nbytes / 1024 / 1024
-        st.markdown(f"## First file: {file_one.name} | Size: {file_size:.2f}MB")
         st.write(df1)
     with col2:
         st.markdown(f"## Second file: {file_two.name}")
-        file_size = file_two.getbuffer().nbytes / 1024 / 1024
-        st.markdown(f"## Second file: {file_two.name} | Size: {file_size:.2f}MB")
         st.write(df2)
     
     # Get the common column names from the user
