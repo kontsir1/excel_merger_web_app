@@ -62,7 +62,7 @@ def main():
         # Display the dataframes
         col1, col2 = st.columns(2)
         with col1:
-            st.subheader(f"## First file: {first_file_name}")
+            st.subheader("{first_file_name}")
             st.write(df1)
         with col2:
             st.subheader(f"## Second file: {second_file_name}")
@@ -74,7 +74,7 @@ def main():
         df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
 
         # Display merged dataframe
-        st.subheader("## Merged dataframe")
+        st.subheader("Merged dataframe")
         st.write(df_merged)
 
         # Select columns to export
