@@ -6,25 +6,28 @@ from io import BytesIO
 
 def read_files():
     """Read the first and second files as pandas dataframes"""
-    file_one = st.sidebar.file_uploader("Upload first file")
-    file_two = st.sidebar.file_uploader("Upload second file")
-    if file_one and file_two:
+    file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])
+    if file_one:
+        st.success("File uploaded successfully")
         file_one_ext = file_one.name.split('.')[-1]
+        if file_one_ext == 'csv':
+            df1 = pd.read_csv(file_one)
+        else:
+            df1 = pd.read_excel(file_one)
+    else:
+        return None, None, None
+    file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
+    if file_two:
+        st.success("File uploaded successfully")
         file_two_ext = file_two.name.split('.')[-1]
+        if file_two_ext == 'csv':
+            df2 = pd.read_csv(file_two)
+        else:
+            df2 = pd.read_excel(file_two)
+    else:
+        return None, None, None
 
-        if file_one_ext in ['csv', 'xlsx']:
-            if file_one_ext == 'csv':
-                header_row_file1 = st.sidebar.selectbox("Select the header row of the First CSV file", list(range(1, 100)))
-                df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True)
-            else:
-                df1 = pd.read_excel(file_one)
-        
-        if file_two_ext in ['csv', 'xlsx']:
-            if file_two_ext == 'csv':
-                header_row_file2 = st.sidebar.selectbox("Select the header row of the Second CSV file", list(range(1, 100)))
-                df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True)
-            else:
-                df2 = pd.read_excel(file_two)
+    if file_one and file_two:
         return df1, df2, file_one.name, file_two.name
     else:
         return None, None, None, None
