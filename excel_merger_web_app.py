@@ -74,11 +74,12 @@ def main():
         df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
         
         # Change column name
-        column_to_change = st.sidebar.selectbox("Select column to change its name", df_merged.columns)
+        column_to_change = st.sidebar.selectbox("Select column to change its name", df_merged.columns).tolist()[0]
         new_name = st.sidebar.text_input("Enter new name for the selected column")
         if new_name:
             if isinstance(new_name, str) and new_name.strip() and column_to_change:  # check if the input is not empty and selected columns
                 df_merged = df_merged.rename(columns={column_to_change:new_name})
+
 
 
 
