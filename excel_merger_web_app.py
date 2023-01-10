@@ -14,13 +14,13 @@ def read_files():
 
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
-                df1 = pd.read_csv(file_one)
+                df1 = pd.read_csv(file_one, skipinitialspace=True)
             else:
                 df1 = pd.read_excel(file_one)
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
-                df2 = pd.read_csv(file_two)
+                df2 = pd.read_csv(file_two, skipinitialspace=True)
             else:
                 df2 = pd.read_excel(file_two)
         return df1, df2, file_one.name, file_two.name
