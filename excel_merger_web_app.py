@@ -74,7 +74,7 @@ def main():
         df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
 
         # Display merged dataframe
-        st.markdown("## Merged dataframe")
+        st.subheader("## Merged dataframe")
         st.write(df_merged)
 
         # Select columns to export
