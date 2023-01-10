@@ -76,8 +76,9 @@ def main():
         # Change column name
         column_to_change = st.sidebar.selectbox("Select column to change its name", df_merged.columns)
         new_name = st.sidebar.text_input("Enter new name for the selected column")
-        if new_name:
+        if new_name and isinstance(new_name, str):
             df_merged.rename(columns={column_to_change: new_name}, inplace=True)
+
         
         # Export selected columns of dataframe as CSV and XLSX
         selected_columns = st.multiselect("Select columns to export", df_merged.columns, default=df_merged.columns)
