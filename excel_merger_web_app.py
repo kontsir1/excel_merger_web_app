@@ -37,19 +37,19 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
 
 def export_dataframe(df, selected_columns):  
     """Export selected columns of dataframe as CSV and XLSX"""
-    # Export as CSV
-    csv = df[selected_columns].to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-    csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
-    st.sidebar.markdown(csv_href, unsafe_allow_html=True)
-
-    # Export as XLSX
-    xlsx_file = BytesIO()
-    df[selected_columns].to_excel(xlsx_file, index=False)
-    xlsx_file.seek(0)
-    xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
-    xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
-    st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
+    file_type = st.selectbox("Select the file type for export", ["CSV", "XLSX"])
+    if file_type == "CSV":
+        csv = df[selected_columns].to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()
+        csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
+        st.sidebar.markdown(csv_href, unsafe_allow_html=True)
+    elif file_type == "XLSX":
+        xlsx_file = BytesIO()
+        df[selected_columns].to_excel(xlsx_file, index=False)
+        xlsx_file.seek(0)
+        xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
+        xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
+        st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
 
 def main():
@@ -79,12 +79,6 @@ def main():
 
         # Select columns to export
         selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
-
-        # Export dataframe as CSV
-        if st.sidebar.button("Download CSV"):
-            export_dataframe(df_merged, selected_columns)
-        if st.sidebar.button("Download Excel"):
-            export_dataframe(df_merged, selected_columns)
 
 if __name__ == "__main__":
     main()
