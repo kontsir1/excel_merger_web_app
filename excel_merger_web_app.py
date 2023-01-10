@@ -13,6 +13,9 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     
     return df_merged
 
+def delete_rows(df, start_row, end_row):
+    return df.drop(range(start_row, end_row+1))
+
 # Set page layout to wide
 st.set_page_config(layout="wide")
 
@@ -35,7 +38,7 @@ if file_one and file_two:
         start_row_df1 = st.number_input("Start row", max_value=df1.shape[0])
         end_row_df1 = st.number_input("End row", max_value=df1.shape[0])
         # Delete the specified range of rows from the first dataframe
-        df1 = df1.drop(range(start_row_df1, end_row_df1+1))
+        df1 = delete_rows(df1, start_row_df1, end_row_df1)
 
     # Ask the user whether they want to delete rows from the second dataframe
     delete_rows_df2 = st.checkbox("Delete rows from second dataframe")
@@ -44,7 +47,7 @@ if file_one and file_two:
         start_row_df2 = st.number_input("Start row", max_value=df2.shape[0])
         end_row_df2 = st.number_input("End row", max_value=df2.shape[0])
         # Delete the specified range of rows from the second dataframe
-        df2 = df2.drop(range(start_row_df2, end_row_df2+1))
+        df2 = delete_rows(df2, start_row_df2, end_row_df2)
 
     # Display the two dataframes side by side
     col1, col2 = st.columns(2)
