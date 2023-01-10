@@ -14,8 +14,8 @@ def read_files():
             df1 = pd.read_csv(file_one)
         else:
             df1 = pd.read_excel(file_one)
-        else:
-            return None, None, None, None
+    else:
+        return None, None, None
     file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
     if file_two:
         st.success("File uploaded successfully")
@@ -31,6 +31,7 @@ def read_files():
         return df1, df2, file_one.name, file_two.name
     else:
         return None, None, None, None
+
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     """Merge the two dataframes on the specified common columns"""
