@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import base64
+import openpyxl
+from io import BytesIO
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     # Merge the two dataframes on the specified common columns
@@ -74,8 +76,11 @@ if file_one and file_two:
 
     if st.sidebar.button("Download XLSX"):
         st.markdown("Clicked download button")
-        xlsx = df_merged.to_excel(index=False)
-        b64 = base64.b64encode(xlsx.encode()).decode()
-        href = f'<a href="data:file/xlsx;base64,{b64}" download="merged_data.xlsx">Download XLSX File</a>'
+        xlsx_file = BytesIO()
+        df_merged.to_excel(xlsx_file, index=False)
+        xlsx_file.seek(0)
+        xlsx_data = xlsx_file.read()
+        b64 = base64.b64encode(xlsx_data).decode()
+        href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="merged_data.xlsx">Download XLSX File</a>'
         st.markdown(href, unsafe_allow_html=True)
 
