@@ -65,7 +65,7 @@ def main():
             st.subheader(f"{first_file_name}")
             st.write(df1)
         with col2:
-            st.subheader(f"## Second file: {second_file_name}")
+            st.subheader(f"{second_file_name}")
             st.write(df2)
 
         # Merge dataframes and select common columns
