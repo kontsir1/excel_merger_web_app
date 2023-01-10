@@ -6,8 +6,8 @@ from io import BytesIO
 
 def read_files():
     """Read the first and second files as pandas dataframes"""
-    file_one = st.file_uploader("Upload first file")
-    file_two = st.file_uploader("Upload second file")
+    file_one = st.sidebar.file_uploader("Upload first file")
+    file_two = st.sidebar.file_uploader("Upload second file")
     if file_one and file_two:
         df1 = pd.read_csv(file_one)
         df2 = pd.read_csv(file_two)
@@ -30,7 +30,7 @@ def export_dataframe(df, selected_column):
     csv = df[selected_columns].to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    st.sidebar.markdown(href, unsafe_allow_html=True)
                      
 def main():
     df1, df2, first_file_name, second_file_name = read_files()
@@ -58,8 +58,8 @@ def main():
             st.write(df2)
 
         # Merge dataframes and select common columns
-        common_column1 = st.selectbox("Select common column for first file", df1.columns)
-        common_column2 = st.selectbox("Select common column for second file", df2.columns)
+        common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
+        common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
         df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
 
         # Display merged dataframe
@@ -67,10 +67,10 @@ def main():
         st.write(df_merged)
 
         # Select columns to export
-        selected_columns = st.multiselect("Select columns to export", df_merged.columns)
+        selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
         # Export dataframe as CSV
-        if st.button("Download CSV"):
+        if st.sidebar.button("Download CSV"):
             export_dataframe(df_merged, selected_columns)
 
 if __name__ == "__main__":
