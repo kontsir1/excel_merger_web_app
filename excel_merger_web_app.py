@@ -28,8 +28,8 @@ file_two = st.sidebar.file_uploader("Upload second file")
 # Check if both files are uploaded
 if file_one and file_two:
     # Read both files as pandas dataframes
-    df1 = pd.read_csv(file_one)
-    df2 = pd.read_csv(file_two)
+    df1 = pd.read_csv(file_one, on_bad_lines='skip')
+    df2 = pd.read_csv(file_two, on_bad_lines='skip')
 
     # Ask the user whether they want to delete rows from the first dataframe
     delete_rows_df1 = st.checkbox("Delete rows from first dataframe")
