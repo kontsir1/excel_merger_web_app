@@ -17,16 +17,24 @@ def read_files():
                 header_row_file1 = st.sidebar.selectbox("Select the header row of the First CSV file", list(range(1, 100)))
                 try:
                     df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True)
-                    df1.dropna(inplace=True)
                 except:
                     st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
+                    df1 = None
+                try:
+                    df1.dropna(inplace=True)
+                except:
+                    st.warning("An error occurred while dropping the NaN rows.")
                     df1 = None
             else:
                 try:
                     df1 = pd.read_excel(file_one)
-                    df1.dropna(inplace=True)
                 except:
                     st.warning("An error occurred while processing the first file. Make sure it is a valid Excel file.")
+                    df1 = None
+                try:
+                    df1.dropna(inplace=True)
+                except:
+                    st.warning("An error occurred while dropping the NaN rows.")
                     df1 = None
         
         if file_two_ext in ['csv', 'xlsx']:
@@ -34,21 +42,28 @@ def read_files():
                 header_row_file2 = st.sidebar.selectbox("Select the header row of the Second CSV file", list(range(1, 100)))
                 try:
                     df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True)
-                    df2.dropna(inplace=True)
                 except:
                     st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
+                    df2 = None
+                try:
+                    df2.dropna(inplace=True)
+                except:
+                    st.warning("An error occurred while dropping the NaN rows.")
                     df2 = None
             else:
                 try:
                     df2 = pd.read_excel(file_two)
-                    df2.dropna(inplace=True)
                 except:
                     st.warning("An error occurred while processing the second file. Make sure it is a valid Excel file.")
                     df2 = None
-        return df1, df2, file_one.name, file_two.name
-    else:
-        return None, None, None, None
-
+                try:
+                    df2.dropna(inplace=True)
+                except:
+                    st.warning("An error occurred while dropping the NaN rows.")
+                df2 = None
+            return df1, df2, file_one.name, file_two.name
+                else:
+            return None, None, None, None
 
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
