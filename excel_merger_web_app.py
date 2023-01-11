@@ -1,8 +1,9 @@
-import streamlit as st
+iimport streamlit as st
 import pandas as pd
 import base64
 import openpyxl
 from io import BytesIO
+import csvkit as csv
 
 def read_files():
     """Read the first and second files as pandas dataframes"""
@@ -15,19 +16,21 @@ def read_files():
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
                 header_row_file1 = st.sidebar.selectbox("Select the header row of the First CSV file", list(range(1, 100)))
-                df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True, lineterminator='\r')
+                df1 = pd.read_csv(file_one, skiprows=header_row_file1-1,  skipinitialspace=True)
+                bad_lines = pd.DataFrame(csv.reader(file_one))
             else:
                 df1 = pd.read_excel(file_one)
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
                 header_row_file2 = st.sidebar.selectbox("Select the header row of the Second CSV file", list(range(1, 100)))
-                df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True, lineterminator='\r')
+                df2 = pd.read_csv(file_two, skiprows=header_row_file2-1,  skipinitialspace=True)
+                bad_lines = pd.DataFrame(csv.reader(file_two))
             else:
                 df2 = pd.read_excel(file_two)
-        return df1, df2, file_one.name, file_two.name
+        return df1, df2, file_one.name, file_two.name, bad_lines
     else:
-        return None, None, None, None
+        return None, None, None, None, None
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     """Merge the two dataframes on the specified common columns"""
