@@ -15,14 +15,14 @@ def read_files():
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
                 header_row_file1 = st.sidebar.selectbox("Select the header row of the First CSV file", list(range(1, 100)))
-                df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True, header=None)
+                df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True, error_bad_lines=False)
             else:
                 df1 = pd.read_excel(file_one)
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
                 header_row_file2 = st.sidebar.selectbox("Select the header row of the Second CSV file", list(range(1, 100)))
-                df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True, header=None)
+                df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True, error_bad_lines=False)
             else:
                 df2 = pd.read_excel(file_two)
         return df1, df2, file_one.name, file_two.name
