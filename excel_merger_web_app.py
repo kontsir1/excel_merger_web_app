@@ -48,13 +48,12 @@ def read_files():
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     # Merge the two dataframes on the specified common columns
-    try:
-        df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
-        # Drop one of the common columns
-        df_merged.drop(common_column1, axis=1, inplace=True)
-    except ValueError:
-        st.error("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
-        return
+    df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
+    
+    # Drop one of the common columns
+    df_merged.drop(common_column1, axis=1, inplace=True)
+    
+    return df_merged
     
 
 def export_dataframe(df, selected_columns):  
