@@ -5,25 +5,6 @@ import openpyxl
 from io import BytesIO
 
 
-# Set theme colors
-primary_color = "#2D72C5"
-secondary_color = "#F3A623"
-text_color = "#1B1B1B"
-background_color = "#F7F7F7"
-
-# Apply theme colors to the Streamlit theme
-st.set_theme(
-    theme_type="custom",
-    primary_color=primary_color,
-    secondary_color=secondary_color,
-    text_color=text_color,
-    background_color=background_color,
-    primary_palette="Blues",
-    secondary_palette="Oranges",
-)
-
-
-
 st.set_page_config(page_title="Merge CSV and Excel Files", page_icon=":guardsman:", layout="wide")
 
 st.title("Merge CSV and Excel Files")
