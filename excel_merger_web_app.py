@@ -15,11 +15,21 @@ def read_files():
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
                 header_row_file1 = st.sidebar.selectbox("Select the header row of the First CSV file", list(range(1, 100)))
-                try:
-                    df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True, warn_bad_lines=True)
-                except:
-                    st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
-                    df1 = None
+                cleaned_data = []
+                errors = []
+                with open(file_one, 'r') as csv_file:
+                    for i, line in enumerate(csv_file):
+                        # Process line, check for errors, and add to cleaned_data if valid
+                        # If there is an error, you can save the line number and the error message
+                        pass
+                if len(errors)>0:
+                  st.warning(f"An error occurred in line {errors[0]['line']} while processing the first file. {errors[0]['msg']}")
+                else:
+                  try:
+                      df1 = pd.read_csv(cleaned_data, skiprows=header_row_file1-1, skipinitialspace=True)
+                  except:
+                      st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
+                      df1 = None
             else:
                 try:
                     df1 = pd.read_excel(file_one)
@@ -30,11 +40,21 @@ def read_files():
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
                 header_row_file2 = st.sidebar.selectbox("Select the header row of the Second CSV file", list(range(1, 100)))
-                try:
-                    df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True, warn_bad_lines=True)
-                except:
-                    st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
-                    df2 = None
+                cleaned_data = []
+                errors = []
+                with open(file_two, 'r') as csv_file:
+                    for i, line in enumerate(csv_file):
+                        # Process line, check for errors, and add to cleaned_data if valid
+                        # If there is an error, you can save the line number and the error message
+                        pass
+                if len(errors)>0:
+                  st.warning(f"An error occurred in line {errors[0]['line']} while processing the second file. {errors[0]['msg']}")
+                else:
+                  try:
+                      df2 = pd.read_csv(cleaned_data, skiprows=header_row_file2-1, skipinitialspace=True)
+                  except:
+                      st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
+                      df2 = None
             else:
                 try:
                     df2 = pd.read_excel(file_two)
@@ -44,6 +64,7 @@ def read_files():
         return df1, df2, file_one.name, file_two.name
     else:
         return None, None, None, None
+
 
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
