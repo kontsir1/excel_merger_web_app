@@ -25,6 +25,11 @@ def read_files():
                 df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True)
             else:
                 df2 = pd.read_excel(file_two)
+        
+        # Replace missing values with a specific value
+        df1.fillna(0, inplace=True)
+        df2.fillna(0, inplace=True)
+        
         return df1, df2, file_one.name, file_two.name
     else:
         return None, None, None, None
