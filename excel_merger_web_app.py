@@ -4,6 +4,8 @@ import base64
 import openpyxl
 from io import BytesIO
 
+st.set_page_config(page_title="Merge CSV and Excel Files", page_icon=":guardsman:", layout="wide")
+
 st.title("Merge CSV and Excel Files")
 st.write("This app allows you to upload two CSV or Excel files and merge them on a common column.")
 st.write("You can also select which columns of the merged dataframe should be exported.")
@@ -78,10 +80,7 @@ def export_dataframe(df, selected_columns):
                      
 
 def main():
-    
-    # Use the full page instead of a narrow central column
-    st.set_page_config(layout="wide")
-    
+
     df1, df2, first_file_name, second_file_name = read_files()
 
     if df1 is not None:
