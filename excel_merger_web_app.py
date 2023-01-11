@@ -61,9 +61,9 @@ def read_files():
                 except:
                     st.warning("An error occurred while dropping the NaN rows.")
                 df2 = None
-            return df1, df2, file_one.name, file_two.name
-                else:
-            return None, None, None, None
+        return df1, df2, file_one.name, file_two.name
+    else:
+        return None, None, None, None
 
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
