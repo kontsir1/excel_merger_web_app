@@ -95,7 +95,7 @@ def main():
         # Merge dataframes and select common columns
         common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
         common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
-        df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
+        #df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
 
         # Display merged dataframe
         st.subheader("Merged dataframe")
