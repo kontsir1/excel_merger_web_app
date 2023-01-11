@@ -4,6 +4,11 @@ import base64
 import openpyxl
 from io import BytesIO
 
+st.title("Merge CSV and Excel Files")
+st.write("This app allows you to upload two CSV or Excel files and merge them on a common column.")
+st.write("You can also select which columns of the merged dataframe should be exported.")
+st.write("The resulting dataframe is exported to a CSV and an XLSX file and allow the user to download these files.")
+
 def read_files():
     """Read the first and second files as pandas dataframes"""
     file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
@@ -73,12 +78,6 @@ def export_dataframe(df, selected_columns):
                      
 
 def main():
-
-    st.title("Merge CSV and Excel Files")
-    st.write("This app allows you to upload two CSV or Excel files and merge them on a common column.")
-    st.write("You can also select which columns of the merged dataframe should be exported.")
-    st.write("The resulting dataframe is exported to a CSV and an XLSX file and allow the user to download these files.")
-
     
     # Use the full page instead of a narrow central column
     st.set_page_config(layout="wide")
