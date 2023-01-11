@@ -16,7 +16,7 @@ def read_files():
             if file_one_ext == 'csv':
                 header_row_file1 = st.sidebar.selectbox("Select the header row of the First CSV file", list(range(1, 100)))
                 try:
-                    df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True)
+                    df1 = pd.read_csv(file_one, skiprows=header_row_file1-1, skipinitialspace=True, delim_whitespace=True)
                 except:
                     st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
                     df1 = None
@@ -31,7 +31,7 @@ def read_files():
             if file_two_ext == 'csv':
                 header_row_file2 = st.sidebar.selectbox("Select the header row of the Second CSV file", list(range(1, 100)))
                 try:
-                    df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True)
+                    df2 = pd.read_csv(file_two, skiprows=header_row_file2-1, skipinitialspace=True, delim_whitespace=True)
                 except:
                     st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
                     df2 = None
