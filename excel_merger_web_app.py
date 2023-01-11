@@ -21,8 +21,9 @@ def read_files():
 
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
+                chunksize = 500  # set the chunksize to 500 rows
                 try:
-                    df1 = pd.read_csv(file_one, skipinitialspace=True)
+                    df1 = pd.read_csv(file_one, chunksize=chunksize)
                 except:
                     st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
                     df1 = None
@@ -35,8 +36,9 @@ def read_files():
         
         if file_two_ext in ['csv', 'xlsx']:
             if file_two_ext == 'csv':
+                chunksize = 500  # set the chunksize to 500 rows
                 try:
-                    df2 = pd.read_csv(file_two, skipinitialspace=True)
+                    df2 = pd.read_csv(file_two, chunksize=chunksize)
                 except:
                     st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
                     df2 = None
