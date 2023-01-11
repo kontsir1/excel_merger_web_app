@@ -101,9 +101,11 @@ def main():
 
         # Export dataframe as CSV
         if st.sidebar.button("Download CSV"):
-            export_dataframe(df_merged, selected_columns)
+                if df_merged is not None:
+                    export_dataframe(df_merged, selected_columns)
         if st.sidebar.button("Download Excel"):
-            export_dataframe(df_merged, selected_columns)
+            if df_merged is not None:
+                    export_dataframe(df_merged, selected_columns)
 
 if __name__ == "__main__":
     main()
