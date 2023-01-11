@@ -11,6 +11,7 @@ st.write("This app allows you to upload two CSV or Excel files and merge them on
 st.write("You can also select which columns of the merged dataframe should be exported.")
 st.write("The resulting dataframe is exported to a CSV and an XLSX file and allow the user to download these files.")
 
+
 def read_files():
     """Read the first and second files as pandas dataframes"""
     file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
@@ -18,12 +19,14 @@ def read_files():
     if file_one and file_two:
         file_one_ext = file_one.name.split('.')[-1]
         file_two_ext = file_two.name.split('.')[-1]
-
+        df1 = pd.DataFrame()
+        df2 = pd.DataFrame()
         if file_one_ext in ['csv', 'xlsx']:
             if file_one_ext == 'csv':
                 chunksize = 500  # set the chunksize to 500 rows
                 try:
-                    df1 = pd.read_csv(file_one, chunksize=chunksize)
+                    for chunk in pd.read_csv(file_one, chunksize=chunksize):
+                        df1 = pd.concat([df1, chunk])
                 except:
                     st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
                     df1 = None
@@ -38,7 +41,8 @@ def read_files():
             if file_two_ext == 'csv':
                 chunksize = 500  # set the chunksize to 500 rows
                 try:
-                    df2 = pd.read_csv(file_two, chunksize=chunksize)
+                    for chunk in pd.read_csv(file_two, chunksize=chunksize):
+                        df2 = pd.concat([df2, chunk])
                 except:
                     st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
                     df2 = None
