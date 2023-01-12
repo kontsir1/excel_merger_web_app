@@ -86,7 +86,7 @@ def export_dataframe(df, selected_columns):
 
 def main():
 
-    df1, df2, first_file_name, second_file_name = read_files()
+    df1, df2, first_file_name, second_file_name = read_files(file_one,file_two)
 
     if df1 is not None:
         # Display the dataframes
