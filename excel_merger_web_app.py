@@ -37,6 +37,8 @@ def read_excel(file):
 @st.cache
 def read_files(file_one,file_two):
     """Read the first and second files as pandas dataframes"""
+    file_one_ext = file_one.name.split('.')[-1]
+    file_two_ext = file_two.name.split('.')[-1]
     if file_one_ext == 'csv':
         df1 = read_csv(file_one)
     else:
