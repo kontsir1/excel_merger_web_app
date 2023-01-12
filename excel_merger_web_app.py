@@ -12,7 +12,7 @@ st.write("This app allows you to upload two CSV or Excel files and merge them on
 st.write("You can also select which columns of the merged dataframe should be exported.")
 st.write("The resulting dataframe is exported to a CSV and an XLSX file and allow the user to download these files.")
 
-
+@st.cache
 def read_files():
     """Read the first and second files as pandas dataframes"""
     file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
