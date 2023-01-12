@@ -15,48 +15,37 @@ st.write("The resulting dataframe is exported to a CSV and an XLSX file and allo
 file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
 file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
 
+def read_csv(file):
+    df = pd.DataFrame()
+    chunksize = 500  # set the chunksize to 500 rows
+    try:
+        for chunk in pd.read_csv(file, chunksize=chunksize):
+            df = pd.concat([df, chunk])
+    except:
+        st.warning("An error occurred while processing the file. Make sure it is a valid CSV file.")
+        df = None
+    return df
+
+def read_excel(file):
+    try:
+        df = pd.read_excel(file)
+    except:
+        st.warning("An error occurred while processing the file. Make sure it is a valid Excel file.")
+        df = None
+    return df
+
 @st.cache
 def read_files(file_one,file_two):
     """Read the first and second files as pandas dataframes"""
-    if file_one and file_two:
-        file_one_ext = file_one.name.split('.')[-1]
-        file_two_ext = file_two.name.split('.')[-1]
-        df1 = pd.DataFrame()
-        df2 = pd.DataFrame()
-        if file_one_ext in ['csv', 'xlsx']:
-            if file_one_ext == 'csv':
-                chunksize = 500  # set the chunksize to 500 rows
-                try:
-                    for chunk in pd.read_csv(file_one, chunksize=chunksize):
-                        df1 = pd.concat([df1, chunk])
-                except:
-                    st.warning("An error occurred while processing the first file. Make sure it is a valid CSV file.")
-                    df1 = None
-            else:
-                try:
-                    df1 = pd.read_excel(file_one)
-                except:
-                    st.warning("An error occurred while processing the first file. Make sure it is a valid Excel file.")
-                    df1 = None
-        
-        if file_two_ext in ['csv', 'xlsx']:
-            if file_two_ext == 'csv':
-                chunksize = 500  # set the chunksize to 500 rows
-                try:
-                    for chunk in pd.read_csv(file_two, chunksize=chunksize):
-                        df2 = pd.concat([df2, chunk])
-                except:
-                    st.warning("An error occurred while processing the second file. Make sure it is a valid CSV file.")
-                    df2 = None
-            else:
-                try:
-                    df2 = pd.read_excel(file_two)
-                except:
-                    st.warning("An error occurred while processing the second file. Make sure it is a valid Excel file.")
-                    df2 = None
-        return df1, df2, file_one.name, file_two.name
-    else:
-        return None, None, None, None
+    if file_one_ext == 'csv':
+    df1 = read_csv(file_one)
+else:
+    df1 = read_excel(file_one)
+if file_two_ext == 'csv':
+    df2 = read_csv(file_two)
+else:
+    df2 = read_excel(file_two)
+return df1, df2, file_one.name, file_two.name
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     df_merged = None
