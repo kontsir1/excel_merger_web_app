@@ -69,7 +69,7 @@ def export_dataframe(df, selected_columns):
         csv = df[selected_columns].to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()
         csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
-        st.sidebar.markdown(csv_href, unsafe_allow_html=True)
+        st.sidebar.button(csv_href, unsafe_allow_html=True)
 
         # Export as XLSX
         xlsx_file = BytesIO()
@@ -77,7 +77,7 @@ def export_dataframe(df, selected_columns):
         xlsx_file.seek(0)
         xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
         xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
-        st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
+        st.sidebar.button(xlsx_href, unsafe_allow_html=True)
                      
 
 def main():
@@ -107,12 +107,12 @@ def main():
         selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
         # Export dataframe as CSV
-        if st.sidebar.button("Download CSV"):
-                if df_merged is not None:
-                    export_dataframe(df_merged, selected_columns)
-        if st.sidebar.button("Download Excel"):
-            if df_merged is not None:
-                    export_dataframe(df_merged, selected_columns)
+         if df_merged is not None:
+            export_dataframe(df_merged, selected_columns)
+       
+         if df_merged is not None:
+             export_dataframe(df_merged, selected_columns)
+               
 
 if __name__ == "__main__":
     main()
