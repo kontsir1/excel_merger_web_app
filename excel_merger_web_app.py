@@ -106,9 +106,7 @@ def main():
         # Select columns to export
         selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
-        # Export dataframe as CSV
-        if df_merged is not None:
-            export_dataframe(df_merged, selected_columns)
+        # Export dataframe as CSV or XLSX
         if df_merged is not None:
             export_dataframe(df_merged, selected_columns)
 
