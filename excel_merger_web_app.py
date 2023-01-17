@@ -63,7 +63,7 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
     return df_merged
 
 def export_dataframe(df, selected_columns):
-"""Export selected columns of dataframe as CSV and XLSX"""
+    """Export selected columns of dataframe as CSV and XLSX"""
     if df is not None:
         if len(selected_columns) > 0:
             # Export as CSV
