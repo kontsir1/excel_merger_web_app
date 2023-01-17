@@ -62,28 +62,22 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
         st.warning("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
     return df_merged
 
-def export_csv(df, selected_columns):
-    csv = df[selected_columns].to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-    csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
-    st.sidebar.markdown(csv_href, unsafe_allow_html=True)
+def export_dataframe(df, selected_columns):  
+    if df is not None:
+        """Export selected columns of dataframe as CSV and XLSX"""
+        # Export as CSV
+        csv = df[selected_columns].to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()
+        csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
+        st.sidebar.markdown(csv_href, unsafe_allow_html=True)
 
-def export_excel(df, selected_columns):
-    xlsx_file = BytesIO()
-    df[selected_columns].to_excel(xlsx_file, index=False)
-    xlsx_file.seek(0)
-    xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
-    xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
-    st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
-
-def export_dataframe(df, selected_columns):
-    if st.sidebar.button("Download CSV"):
-        export_csv(df, selected_columns)
-        return
-    if st.sidebar.button("Download Excel"):
-        export_excel(df, selected_columns)
-        return
-
+        # Export as XLSX
+        xlsx_file = BytesIO()
+        df[selected_columns].to_excel(xlsx_file, index=False)
+        xlsx_file.seek(0)
+        xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
+        xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
+        st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
 
 def main():
@@ -112,7 +106,13 @@ def main():
         # Select columns to export
         selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
-        export_dataframe(df_merged, selected_columns)
+        # Export dataframe as CSV
+        if st.sidebar.button("Download CSV"):
+                if df_merged is not None:
+                    export_dataframe(df_merged, selected_columns)
+        if st.sidebar.button("Download Excel"):
+            if df_merged is not None:
+                    export_dataframe(df_merged, selected_columns)
 
 if __name__ == "__main__":
     main()
