@@ -17,7 +17,7 @@ file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv
 
 def read_csv(file):
     df = pd.DataFrame()
-    chunksize = 5  # set the chunksize to 500 rows
+    chunksize = 50  # set the chunksize to 50 rows
     try:
         for chunk in pd.read_csv(file, chunksize=chunksize):
             df = pd.concat([df, chunk])
