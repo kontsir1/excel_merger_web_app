@@ -112,5 +112,7 @@ def main():
         # Select columns to export
         selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
+        export_dataframe(df_merged, selected_columns)
+
 if __name__ == "__main__":
     main()
