@@ -107,11 +107,11 @@ def main():
         selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
         # Export dataframe as CSV
-         if df_merged is not None:
+        if df_merged is not None:
             export_dataframe(df_merged, selected_columns)
        
-         if df_merged is not None:
-             export_dataframe(df_merged, selected_columns)
+        if df_merged is not None:
+            export_dataframe(df_merged, selected_columns)
                
 
 if __name__ == "__main__":
