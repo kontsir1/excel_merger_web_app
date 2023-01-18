@@ -116,6 +116,8 @@ def main():
         df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
         if df_merged is not None:
             selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
+        else:
+            st.warning("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
         
         # Display merged dataframe
         st.subheader("Merged dataframe")
