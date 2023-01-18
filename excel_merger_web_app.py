@@ -44,7 +44,6 @@ def read_excel(file):
         df = None
     return df
 
-@st.cache
 def read_files(file_one,file_two):
     """Read the first and second files as pandas dataframes"""
     if file_one and file_two:
