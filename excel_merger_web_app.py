@@ -117,8 +117,11 @@ def main():
             st.write(df2)
 
         # Merge dataframes and select common columns
-        common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
-        common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
+        if df1 is not None:
+            common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
+        if df2 is not None:
+            common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
+
 
         # Select columns to export
         df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
