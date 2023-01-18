@@ -111,14 +111,17 @@ def main():
         # Merge dataframes and select common columns
         common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
         common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
-        df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
 
+        # Select columns to export
+        df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
+        if df_merged is not None:
+            selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
+        else:
+            st.warning("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
+        
         # Display merged dataframe
         st.subheader("Merged dataframe")
         st.write(df_merged)
-
-        # Select columns to export
-        selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
 
         # Export dataframe as CSV or XLSX
         if df_merged is not None:
