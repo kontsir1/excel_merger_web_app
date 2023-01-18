@@ -102,14 +102,13 @@ def main():
         if df1 is not None and df2 is not None:
             common_column1 = st.selectbox("Select common column in first file", df1.columns.tolist())
             common_column2 = st.selectbox("Select common column in second file", df2.columns.tolist())
-            df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
+            selected_columns = st.multiselect("Select columns to export", df_merged.columns.tolist())
+            df_merged = merge_dataframes(df1, df2, common_column1, common_column2, selected_columns)
             if df_merged is not None:
                 st.dataframe(df_merged)
-                selected_columns = st.multiselect("Select columns to export", df_merged.columns.tolist())
                 if selected_columns:
                     export_csv(df_merged, selected_columns)
                     export_xlsx(df_merged, selected_columns)
-
 
 if __name__ == "__main__":
     main()
