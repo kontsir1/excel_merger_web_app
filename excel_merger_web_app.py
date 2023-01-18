@@ -105,12 +105,12 @@ def main():
             selected_columns = st.multiselect("Select columns to export", df1.columns.tolist())
             df_merged = merge_dataframes(df1, df2, common_column1, common_column2, selected_columns)
             if df_merged is not None:
-            st.write("Preview of the merged dataframe:")
-            st.dataframe(df_merged)
-            export_csv(df_merged, selected_columns)
-            export_xlsx(df_merged, selected_columns)
+                st.write("Preview of the merged dataframe:")
+                st.dataframe(df_merged)
+                export_csv(df_merged, selected_columns)
+                export_xlsx(df_merged, selected_columns)
             else:
-            st.warning("Please upload two files to merge.")
+                st.warning("Please upload two files to merge.")
 
 
 if __name__ == "__main__":
