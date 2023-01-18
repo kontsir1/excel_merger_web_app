@@ -54,7 +54,7 @@ def read_files(file_one,file_two):
     else:
         return None, None, None, None
 
-def merge_dataframes(df1, df2, common_column1, common_column2):
+def merge_dataframes(df1, df2, common_column1, common_column2, selected_columns):
     df_merged = None
     if set(selected_columns[0]).intersection(set(selected_columns[1])) != set(selected_columns[0]):
         st.warning("Error: Could not merge dataframes. Make sure the selected columns are the same in both dataframes.")
