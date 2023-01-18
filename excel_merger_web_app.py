@@ -39,14 +39,20 @@ def read_excel(file):
 def read_files(file_one,file_two):
     """Read the first and second files as pandas dataframes"""
     if file_one and file_two:
+        data = file_one.read().decode()
+        header_match = re.search(r'^(Segments.*)', data, re.MULTILINE)
+        header = header_match.group(1)
+        data = re.sub(r'^[#].*\n(?!'+header+')', '', data)
+        data = re.sub(r'\n[#].*', '', data)
+        data = re.sub(r'\n.*(D_Variants).*\n', '\n', data)
         file_one_ext = file_one.name.split('.')[-1]
         file_two_ext = file_two.name.split('.')[-1]
         df1 = pd.DataFrame()
         df2 = pd.DataFrame()
         if file_one_ext == 'csv':
-            df1 = read_csv(file_one)
+            df1 = pd.read_csv(BytesIO(data.encode()))
         else:
-            df1 = read_excel(file_one)
+            df1 = pd.read_excel(file_one)
         if file_two_ext == 'csv':
             df2 = read_csv(file_two)
         else:
@@ -54,6 +60,7 @@ def read_files(file_one,file_two):
         return df1, df2, file_one.name, file_two.name
     else:
         return None, None, None, None
+
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     df_merged = None
