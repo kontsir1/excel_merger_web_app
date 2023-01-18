@@ -107,10 +107,13 @@ def main():
             if df_merged is not None:
                 st.write("Preview of the merged dataframe:")
                 st.dataframe(df_merged)
-                export_csv(df_merged, selected_columns)
-                export_xlsx(df_merged, selected_columns)
-            else:
-                st.warning("Please upload two files to merge.")
+
+                selected_columns = st.multiselect("Select columns to export", df_merged.columns.tolist())
+                if set(selected_columns[0]).intersection(set(selected_columns[1])) != set(selected_columns[0]):
+                    st.warning("Error: Could not export dataframes. Make sure the selected columns are the same in both dataframes.")
+                else:
+                    export_csv(df_merged, selected_columns)
+                    export_xlsx(df_merged, selected_columns)
 
 
 if __name__ == "__main__":
