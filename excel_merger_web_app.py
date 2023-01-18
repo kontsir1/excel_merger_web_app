@@ -56,10 +56,13 @@ def read_files(file_one,file_two):
 
 def merge_dataframes(df1, df2, common_column1, common_column2):
     df_merged = None
-    try:
-        df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
-    except ValueError:
-        st.warning("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
+    if set(selected_columns[0]).intersection(set(selected_columns[1])) != set(selected_columns[0]):
+        st.warning("Error: Could not merge dataframes. Make sure the selected columns are the same in both dataframes.")
+    else:
+        try:
+            df_merged = pd.merge(df1, df2, left_on=common_column1, right_on=common_column2, how='inner')
+        except ValueError:
+            st.warning("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
     return df_merged
 
 def export_csv(df, selected_columns):
