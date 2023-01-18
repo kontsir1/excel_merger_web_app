@@ -12,9 +12,6 @@ st.write("This app allows you to upload two CSV or Excel files and merge them on
 st.write("You can also select which columns of the merged dataframe should be exported.")
 st.write("The resulting dataframe is exported to a CSV and an XLSX file and allow the user to download these files.")
 
-file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
-file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
-
 def read_csv(file):
     df = pd.DataFrame()
     chunksize = 50  # set the chunksize to 50 rows
@@ -97,36 +94,21 @@ def export_xlsx(df, selected_columns):
                      
 
 def main():
+    file_one = st.sidebar.file_uploader("Upload first file (csv, xlsx)", type=["csv", "xlsx"])    
+    file_two = st.sidebar.file_uploader("Upload second file (csv, xlsx)", type=["csv", "xlsx"])
 
-    df1, df2, first_file_name, second_file_name = read_files(file_one,file_two)
-
-    if df1 is not None:
-        # Display the dataframes
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader(f"{first_file_name}")
-            st.write(df1)
-        with col2:
-            st.subheader(f"{second_file_name}")
-            st.write(df2)
-
-        # Merge dataframes and select common columns
-        common_column1 = st.sidebar.selectbox("Select common column for first file", df1.columns)
-        common_column2 = st.sidebar.selectbox("Select common column for second file", df2.columns)
-
-        # Select columns to export
-        df_merged = merge_dataframes(df1, df2, common_column1, common_column2, selected_columns)
-        if df_merged is not None:
-            selected_columns = st.sidebar.multiselect("Select columns to export", df_merged.columns)
-        
-        # Display merged dataframe
-        st.subheader("Merged dataframe")
-        st.write(df_merged)
-
-        # Export dataframe as CSV or XLSX
-        if df_merged is not None:
-            export_csv(df_merged, selected_columns)
-            export_xlsx(df_merged, selected_columns)
+    if file_one and file_two:
+        df1, df2, file_one_name, file_two_name = read_files(file_one,file_two)
+        if df1 is not None and df2 is not None:
+            common_column1 = st.selectbox("Select common column in first file", df1.columns.tolist())
+            common_column2 = st.selectbox("Select common column in second file", df2.columns.tolist())
+            df_merged = merge_dataframes(df1, df2, common_column1, common_column2)
+            if df_merged is not None:
+                st.dataframe(df_merged)
+                selected_columns = st.multiselect("Select columns to export", df_merged.columns.tolist())
+                if selected_columns:
+                    export_csv(df_merged, selected_columns)
+                    export_xlsx(df_merged, selected_columns)
 
 
 if __name__ == "__main__":
