@@ -62,8 +62,8 @@ def merge_dataframes(df1, df2, common_column1, common_column2):
         st.warning("Error: Could not merge dataframes. Make sure the selected common columns exist and have the same data type in both dataframes.")
     return df_merged
 
-def export_dataframe(df, selected_columns):
-    """Export selected columns of dataframe as CSV and XLSX"""
+def export_csv(df, selected_columns):
+    """Export selected columns of dataframe as CSV"""
     if df is not None:
         if len(selected_columns) > 1:
             # Export as CSV
@@ -72,6 +72,10 @@ def export_dataframe(df, selected_columns):
             csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
             st.sidebar.markdown(csv_href, unsafe_allow_html=True)
 
+def export_xlsx(df, selected_columns):
+    """Export selected columns of dataframe as XLSX"""
+    if df is not None:
+        if len(selected_columns) > 1:
             # Export as XLSX
             xlsx_file = BytesIO()
             df[selected_columns].to_excel(xlsx_file, index=False)
@@ -109,7 +113,9 @@ def main():
 
         # Export dataframe as CSV or XLSX
         if df_merged is not None:
-            export_dataframe(df_merged, selected_columns)
+            export_csv(df_merged, selected_columns)
+            export_xlsx(df_merged, selected_columns)
+
 
 if __name__ == "__main__":
     main()
