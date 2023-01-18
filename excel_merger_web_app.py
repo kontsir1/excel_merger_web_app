@@ -20,21 +20,12 @@ def read_csv(file):
     df = pd.DataFrame()
     chunksize = 50  # set the chunksize to 50 rows
     try:
-        with open(file, 'r') as f:
-            data = f.read()
-        header_match = re.search(r'^(Segments.*)', data, re.MULTILINE)
-        header = header_match.group(1)
-        data = re.sub(r'^[#].*\n(?!'+header+')', '', data)
-        data = re.sub(r'\n[#].*', '', data)
-        data = re.sub(r'\n.*(D_Variants).*\n', '\n', data)
-
-        for chunk in pd.read_csv(BytesIO(data.encode()), chunksize=chunksize):
+        for chunk in pd.read_csv(file, chunksize=chunksize):
             df = pd.concat([df, chunk])
     except:
         st.warning("An error occurred while processing the file. Make sure it is a valid CSV file.")
         df = None
     return df
-
 
 def read_excel(file):
     try:
@@ -44,6 +35,7 @@ def read_excel(file):
         df = None
     return df
 
+@st.cache
 def read_files(file_one,file_two):
     """Read the first and second files as pandas dataframes"""
     if file_one and file_two:
