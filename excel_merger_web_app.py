@@ -66,8 +66,7 @@ def export_csv(df, selected_columns):
     """Export selected columns of dataframe as CSV"""
     if df is not None:
         if len(selected_columns) > 1:
-            # check if the selected columns are the same
-            if set(selected_columns[0]) != set(selected_columns[1]):
+            if set(selected_columns[0]).intersection(set(selected_columns[1])) != set(selected_columns[0]):
                 st.warning("Error: Could not export dataframes. Make sure the selected columns are the same in both dataframes.")
             else:
                 # Export as CSV
@@ -76,12 +75,12 @@ def export_csv(df, selected_columns):
                 csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
                 st.sidebar.markdown(csv_href, unsafe_allow_html=True)
 
+
 def export_xlsx(df, selected_columns):
     """Export selected columns of dataframe as XLSX"""
     if df is not None:
         if len(selected_columns) > 1:
-            # check if the selected columns are the same
-            if set(selected_columns[0]) != set(selected_columns[1]):
+            if set(selected_columns[0]).intersection(set(selected_columns[1])) != set(selected_columns[0]):
                 st.warning("Error: Could not export dataframes. Make sure the selected columns are the same in both dataframes.")
             else:
                 # Export as XLSX
