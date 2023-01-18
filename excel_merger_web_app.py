@@ -66,23 +66,32 @@ def export_csv(df, selected_columns):
     """Export selected columns of dataframe as CSV"""
     if df is not None:
         if len(selected_columns) > 1:
-            # Export as CSV
-            csv = df[selected_columns].to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()
-            csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
-            st.sidebar.markdown(csv_href, unsafe_allow_html=True)
+            # check if the selected columns are the same
+            if set(selected_columns[0]) != set(selected_columns[1]):
+                st.warning("Error: Could not export dataframes. Make sure the selected columns are the same in both dataframes.")
+            else:
+                # Export as CSV
+                csv = df[selected_columns].to_csv(index=False)
+                b64 = base64.b64encode(csv.encode()).decode()
+                csv_href = f'<a href="data:file/csv;base64,{b64}" download="merged_data.csv">Download CSV</a>'
+                st.sidebar.markdown(csv_href, unsafe_allow_html=True)
 
 def export_xlsx(df, selected_columns):
     """Export selected columns of dataframe as XLSX"""
     if df is not None:
         if len(selected_columns) > 1:
-            # Export as XLSX
-            xlsx_file = BytesIO()
-            df[selected_columns].to_excel(xlsx_file, index=False)
-            xlsx_file.seek(0)
-            xlsx_b64 = base64.b64encode(xlsx_file.read()).decode()
-            xlsx_href = f'<a href="data:file/xlsx;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
-            st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
+            # check if the selected columns are the same
+            if set(selected_columns[0]) != set(selected_columns[1]):
+                st.warning("Error: Could not export dataframes. Make sure the selected columns are the same in both dataframes.")
+            else:
+                # Export as XLSX
+                xlsx_file = BytesIO()
+                df[selected_columns].to_excel(xlsx_file, index=False)
+                xlsx_file.seek(0)
+                xlsx_data = xlsx_file.read()
+                xlsx_b64 = base64.b64encode(xlsx_data).decode()
+                xlsx_href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{xlsx_b64}" download="merged_data.xlsx">Download XLSX</a>'
+                st.sidebar.markdown(xlsx_href, unsafe_allow_html=True)
                      
 
 def main():
