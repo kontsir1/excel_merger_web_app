@@ -1,5 +1,5 @@
 pandas
-streamlit==1.16.0
+streamlit==1.26.0
 xlsxwriter==3.0.4
 openpyxl
 files
